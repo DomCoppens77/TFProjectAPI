@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TFProjectAPI.Global\TFProjectAPI.Global.csproj" />
+    <ProjectReference Include="..\TFProjectAPI.Repo\TFProjectAPI.Repo.csproj" />
+    <ProjectReference Include="..\TFProjectAPI.ToolBox\TFProjectAPI.ToolBox.csproj" />
+  </ItemGroup>
+
+</Project>

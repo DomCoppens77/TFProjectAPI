@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>TFProjectAPI.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{5f93a47f-ffdb-46c0-aff8-db941a0611c7}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>TFProjectAPI.Database</RootNamespace>
+    <AssemblyName>TFProjectAPI.Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Functions" />
+    <Folder Include="PostScript" />
+    <Folder Include="Procedures" />
+    <Folder Include="Security" />
+    <Folder Include="Tables" />
+    <Folder Include="Views" />
+    <Folder Include="Security\Logins" />
+    <Folder Include="Security\Users" />
+    <Folder Include="Security\Schemas" />
+    <Folder Include="Security\Roles" />
+    <Folder Include="Procedures\Users" />
+    <Folder Include="Procedures\Currency" />
+    <Folder Include="Procedures\Music" />
+    <Folder Include="Procedures\Shop" />
+    <Folder Include="Procedures\MusicType" />
+    <Folder Include="Procedures\MusicFormat" />
+    <Folder Include="Procedures\Object" />
+    <Folder Include="Procedures\GeneralType" />
+    <Folder Include="Functions\Salt" />
+    <Folder Include="Functions\Count" />
+    <Folder Include="Procedures\Currency_Exchange" />
+    <Folder Include="Procedures\Country" />
+    <Folder Include="Procedures\code_mstr" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Security\Logins\GestUser.sql" />
+    <Build Include="Security\Roles\AppUser.sql" />
+    <Build Include="Security\Schemas\AppUser.sql" />
+    <Build Include="Security\Users\GestUser.sql" />
+    <Build Include="Tables\Users.sql" />
+    <Build Include="Views\V_Users.sql" />
+    <Build Include="Tables\Object.sql" />
+    <Build Include="Tables\Shop.sql" />
+    <Build Include="Tables\Currency.sql" />
+    <Build Include="Tables\Currency_Exchange.sql" />
+    <Build Include="Tables\GeneralType.sql" />
+    <Build Include="Tables\Music.sql" />
+    <Build Include="Tables\MusicType.sql" />
+    <Build Include="Tables\MusicFormat.sql" />
+    <Build Include="Views\V_MusicFormats.sql" />
+    <Build Include="Views\V_MusicTypes.sql" />
+    <Build Include="Views\V_GeneralTypes.sql" />
+    <Build Include="Views\v_Curr.sql" />
+    <Build Include="Views\V_CurrEx.sql" />
+    <Build Include="Views\V_Music_Full.sql" />
+    <Build Include="Views\V_Shops.sql" />
+    <Build Include="Procedures\Users\AddUser.sql" />
+    <Build Include="Procedures\Users\CheckUser.sql" />
+    <Build Include="Procedures\Users\DelUser.sql" />
+    <Build Include="Procedures\Users\UserChgPasswd.sql" />
+    <Build Include="Procedures\Users\UpdUserConnection.sql" />
+    <Build Include="Procedures\Users\UpdUser.sql" />
+    <Build Include="Procedures\Music\AddMusic.sql" />
+    <Build Include="Procedures\Music\DelMusic.sql" />
+    <Build Include="Procedures\Music\UpdMusic.sql" />
+    <Build Include="Procedures\Currency\AddCurrency.sql" />
+    <Build Include="Procedures\Shop\AddShop.sql" />
+    <Build Include="Procedures\MusicFormat\AddMusicFormat.sql" />
+    <Build Include="Procedures\MusicFormat\DelMusicFormat.sql" />
+    <Build Include="Procedures\MusicFormat\UpdMusicFormat.sql" />
+    <Build Include="Procedures\MusicType\AddMusicType.sql" />
+    <Build Include="Procedures\MusicType\DelMusicType.sql" />
+    <Build Include="Procedures\MusicType\UpdMusicType.sql" />
+    <Build Include="Procedures\Object\UpdObject.sql" />
+    <Build Include="Procedures\Object\AddObject.sql" />
+    <Build Include="Procedures\GeneralType\AddGeneralType.sql" />
+    <Build Include="Procedures\Shop\DelShop.sql" />
+    <Build Include="Procedures\Shop\UpdShop.sql" />
+    <Build Include="Procedures\Shop\CheckShop.sql" />
+    <Build Include="Procedures\MusicType\CheckMusicType.sql" />
+    <Build Include="Procedures\MusicFormat\CheckMusicFormat.sql" />
+    <Build Include="Procedures\Currency\UpdCurr.sql" />
+    <Build Include="Procedures\Currency\DelCurr.sql" />
+    <Build Include="Procedures\Currency\CheckCurr.sql" />
+    <Build Include="Functions\Salt\GetPreSalt.sql" />
+    <Build Include="Functions\Salt\GetPostSalt.sql" />
+    <Build Include="Functions\Count\SF_CountCurr.sql" />
+    <Build Include="Functions\Count\SF_CountMusicFormat.sql" />
+    <Build Include="Functions\Count\SF_CountMusicType.sql" />
+    <Build Include="Functions\Count\SF_CountShop.sql" />
+    <Build Include="Procedures\GeneralType\CheckGenType.sql" />
+    <Build Include="Functions\Count\SF_CountGenType.sql" />
+    <Build Include="Views\V_Currency_Exchange.sql" />
+    <Build Include="Views\V_Object.sql" />
+    <Build Include="Views\V_Music.sql" />
+    <Build Include="Procedures\Currency_Exchange\Check_CX_DateF.sql" />
+    <Build Include="Procedures\Currency_Exchange\Check_CX_DateT.sql" />
+    <Build Include="Procedures\Currency_Exchange\AddCurrency_Exchange.sql" />
+    <Build Include="Procedures\Currency_Exchange\DelCurrency_Exchange.sql" />
+    <Build Include="Procedures\Currency_Exchange\UpdCurrency_Exchange.sql" />
+    <Build Include="Procedures\Object\DelObject.sql" />
+    <Build Include="Tables\Country.sql" />
+    <Build Include="Procedures\Country\AddCtry.sql" />
+    <Build Include="Procedures\Country\UpdCtry.sql" />
+    <Build Include="Procedures\Country\DelCtry.sql" />
+    <Build Include="Functions\Count\SF_CountCtry_Shop.sql" />
+    <Build Include="Views\V_Country.sql" />
+    <Build Include="Functions\Count\SF_CountCtry_Music.sql" />
+    <Build Include="Tables\code_mstr.sql" />
+    <Build Include="Views\v_code_mstr.sql" />
+    <Build Include="Procedures\code_mstr\AddCodeMstr.sql" />
+    <Build Include="Procedures\code_mstr\UpdCodeMstr.sql" />
+    <Build Include="Procedures\code_mstr\DelCodeMstr.sql" />
+    <Build Include="Procedures\code_mstr\GetCodeMstr.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostScript\Script.PostDeployment1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TFProjectAPI.Database.publish.xml" />
+  </ItemGroup>
+</Project>

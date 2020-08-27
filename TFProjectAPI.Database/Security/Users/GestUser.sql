@@ -1,0 +1,5 @@
+﻿CREATE USER [GestUser]
+	FOR LOGIN [GestUser]
+GO
+
+GRANT CONNECT To [GestUser]

@@ -1,0 +1,19 @@
+﻿CREATE TABLE [dbo].[Object]
+(
+	[Id] INT IDENTITY NOT NULL, 
+	[Price] FLOAT NOT NULL DEFAULT 0,
+	[Curr] NVARCHAR(3) NOT NULL DEFAULT 'EUR',
+	[ShopId] INT NOT NULL,
+	[Date] DATETIME2,
+	[TypeId] INT NOT NULL,
+    [Signed] BIT NULL default 0, 
+	[SignedBy] NVARCHAR(100),
+	[EAN] NVARCHAR(15),
+	[EAN_EXT] NVARCHAR(15),
+	[Comment1] NVARCHAR(255),
+	[Comment2] NVARCHAR(255),
+	[Onwed] BIT NULL default 1, 
+    CONSTRAINT [PK_Object] PRIMARY KEY ([Id]),
+	CONSTRAINT [FK_Type] FOREIGN KEY ([TypeId]) REFERENCES [GeneralType]([Id]),
+	CONSTRAINT [FK_Shop] FOREIGN KEY ([ShopId]) REFERENCES [Shop]([Id]),
+)
