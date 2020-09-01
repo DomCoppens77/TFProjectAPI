@@ -13,5 +13,15 @@ namespace TFProjectAPI.Repo
         bool Upd(TMusic mu);
 
         bool Del(int id);
+
+        IEnumerable<string> ListBand();
+
+        IEnumerable<TMusic> FindBand(string band);
+
+        IEnumerable<TMusic> FindEan(string ean);
+
+        IEnumerable<TMusic> GetPage(int page,int jump);
+
+        int GetPageCount(int jump);
     }
 }
