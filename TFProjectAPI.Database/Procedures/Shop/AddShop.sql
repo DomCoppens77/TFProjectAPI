@@ -4,7 +4,7 @@
 	@Address2        NVARCHAR(255),
 	@ZIP             NVARCHAR(15),
 	@City            NVARCHAR(30),
-	@Country         NVARCHAR(30),
+	@Country         NVARCHAR(2),
 	@Phone           NVARCHAR(50),
 	@Email           NVARCHAR(320),
 	@WebSite         NVARCHAR(150),
@@ -14,5 +14,5 @@ AS
 BEGIN
 	Insert into [Shop]([Name], [Address1],	[Address2],	[ZIP], [City], [Country], [Phone], [Email], [WebSite], [LocalisationURL], [Closed]) 
     output inserted.Id
-    values(trim(@Name), trim(@Address1), trim(@Address2), trim(@ZIP), trim(@City), trim(@Country), trim(@Phone), trim(@Email), trim(@WebSite), trim(@LocalisationURL), @Closed );
+    values(TRIM(@Name), TRIM(@Address1), TRIM(@Address2), TRIM(@ZIP), TRIM(@City), UPPER(TRIM(@Country)), TRIM(@Phone), TRIM(@Email), TRIM(@WebSite), TRIM(@LocalisationURL), @Closed);
 END

@@ -8,5 +8,5 @@ AS
 BEGIN
 	Insert into [Currency_Exchange]([CurrFrom], [CurrTo],[DateFrom],[DateTo],[Rate]) 
 	output inserted.Id
-    values(trim(@CurrF), trim(@CurrT),@DateF,@DateT,@Rate);
+    values(UPPER(TRIM(@CurrF)), UPPER(TRIM(@CurrT)),@DateF,@DateT,@Rate);
 END

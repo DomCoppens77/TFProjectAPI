@@ -6,6 +6,6 @@ RETURNS INT
 AS
 BEGIN
 	DECLARE @Cnt int;
-	SELECT @Cnt = count(*) from [Music] WHERE [Music].[Ctry] = @ISO; 
+	SELECT @Cnt = count(*) from [Music] WHERE [Music].[Ctry] = UPPER(@ISO); 
 	RETURN (@Cnt);
 END

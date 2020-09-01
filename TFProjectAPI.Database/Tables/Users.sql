@@ -1,13 +1,13 @@
 ﻿CREATE TABLE [dbo].[Users]
 (
 	[Id] INT IDENTITY NOT NULL, 
-    [FirstName] NVARCHAR(50) NOT NULL, 
-    [LastName] NVARCHAR(50) NOT NULL,
+    [FirstName] NVARCHAR(50) NULL, 
+    [LastName] NVARCHAR(50) NULL,
     [Email] NVARCHAR(320) NOT NULL UNIQUE,
     [Passwd] BINARY(64) NOT NULL,
-    [Active] BIT NULL DEFAULT 1, 
-    [Status] INTEGER DEFAULT 1,
-    [ConnectionCount] INTEGER DEFAULT 0,
+    [Active] BIT NOT NULL DEFAULT 1, 
+    [Status] INTEGER DEFAULT 1 NOT NULL,
+    [ConnectionCount] INTEGER DEFAULT 0 NOT NULL,
     [ConnectionLast] DATETIME2 NOT NULL DEFAULT GETDATE(),
     CONSTRAINT [PK_usr_mstr] PRIMARY KEY ([Id]) ,
     CONSTRAINT [UK_usr_email] unique ([Email]),

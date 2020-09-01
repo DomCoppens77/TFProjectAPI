@@ -31,6 +31,6 @@ BEGIN
 
 	Insert into [Music] ([Id], [Band], [Title], [YEAR], [TRACKS], [NbCDs], [NbDvds], [NbLps], [MTypeId], [FormatId], [SerialNbr],[Ctry]) 
     output inserted.Id
-	values(@ID, trim(@Band), trim(@Title), @YEAR, trim(@TRACKS), @NbCDs, @NbDvds, @NbLps, @MTypeId, @FormatId, trim(@SerialNbr),trim(@Ctry));
+	values(@ID, TRIM(@Band), TRIM(@Title), @YEAR, TRIM(@TRACKS), @NbCDs, @NbDvds, @NbLps, @MTypeId, @FormatId, TRIM(@SerialNbr),UPPER(TRIM(@Ctry)));
 
 END

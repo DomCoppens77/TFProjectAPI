@@ -4,5 +4,5 @@
 AS
 BEGIN
 	Insert into [Currency]([Curr],[Description]) 
-    values(@Curr,trim(@Desc));
+    values(UPPER(@Curr),TRIM(@Desc));
 END

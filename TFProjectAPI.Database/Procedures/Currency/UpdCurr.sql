@@ -4,7 +4,7 @@
 AS
 BEGIN
 	UPDATE [Currency] SET
-	[Description] = trim(@Desc)
+	[Description] = UPPER(TRIM(@Desc))
 	WHERE [Curr] = @Curr;
 	RETURN 0
 END

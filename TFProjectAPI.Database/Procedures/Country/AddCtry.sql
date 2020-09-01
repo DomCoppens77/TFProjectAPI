@@ -5,5 +5,5 @@
 AS
 BEGIN
 	Insert into [Country]([ISO],[Ctry],IsEU) 
-    values(@ISO,trim(@Ctry),@IsEU);
+    values(UPPER(@ISO),RTRIM(@Ctry),@IsEU);
 END

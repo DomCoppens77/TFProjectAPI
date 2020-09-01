@@ -5,7 +5,7 @@
 AS
 BEGIN
 	SELECT count(*) from [Currency_Exchange] WHERE
-	[Currency_Exchange].[CurrFrom] = @CurrF
-	AND [Currency_Exchange].[CurrTo] = @CurrT
+	[Currency_Exchange].[CurrFrom] = UPPER(TRIM(@CurrF))
+	AND [Currency_Exchange].[CurrTo] = UPPER(TRIM(@CurrT))
 	AND [Currency_Exchange].[DateTo] = @Date2Chk;
 END

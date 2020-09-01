@@ -29,17 +29,17 @@ BEGIN
 	exec [dbo].[UpdObject] @ID, @Price, @Curr, @ShopId, @Date, @OTypeId, @Signed, @SignedBy, @EAN, @EAN_EXT, @Comment1, @Comment2;
 
 	UPDATE [Music] SET
-	[Band]      = trim(@Band),
-	[Title]     = trim(@Title),
+	[Band]      = TRIM(@Band),
+	[Title]     = TRIM(@Title),
 	[YEAR]      = @YEAR,
-	[TRACKS]    = trim(@TRACKS),
+	[TRACKS]    = TRIM(@TRACKS),
 	[NbCDs]     = @NbCDs,
 	[NbDvds]    = @NbDvds,
 	[NbLps]     = @NbLps,
 	[MTypeId]   = @MTypeId,
 	[FormatId]  = @FormatId, 
-	[SerialNbr] = trim(@SerialNbr),
-	[Ctry]      = trim(@Ctry)
+	[SerialNbr] = TRIM(@SerialNbr),
+	[Ctry]      = UPPER(TRIM(@Ctry))
 	WHERE [Id]  = @Id;
 	RETURN 0
 END

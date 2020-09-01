@@ -6,6 +6,6 @@ RETURNS INT
 AS
 BEGIN
 	DECLARE @Cnt int;
-	SELECT @Cnt = count(*) from [Object] WHERE [Object].[Curr] = @Curr; 
+	SELECT @Cnt = count(*) from [Object] WHERE [Object].[Curr] = UPPER(@Curr); 
 	RETURN (@Cnt);
 END

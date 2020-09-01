@@ -79,6 +79,7 @@
     <Folder Include="Procedures\Currency_Exchange" />
     <Folder Include="Procedures\Country" />
     <Folder Include="Procedures\code_mstr" />
+    <Folder Include="Procedures\Books" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\Logins\GestUser.sql" />
@@ -98,7 +99,7 @@
     <Build Include="Views\V_MusicFormats.sql" />
     <Build Include="Views\V_MusicTypes.sql" />
     <Build Include="Views\V_GeneralTypes.sql" />
-    <Build Include="Views\v_Curr.sql" />
+    <Build Include="Views\V_Curr.sql" />
     <Build Include="Views\V_CurrEx.sql" />
     <Build Include="Views\V_Music_Full.sql" />
     <Build Include="Views\V_Shops.sql" />
@@ -155,11 +156,26 @@
     <Build Include="Views\V_Country.sql" />
     <Build Include="Functions\Count\SF_CountCtry_Music.sql" />
     <Build Include="Tables\code_mstr.sql" />
-    <Build Include="Views\v_code_mstr.sql" />
+    <Build Include="Views\V_Code_Mstr.sql" />
     <Build Include="Procedures\code_mstr\AddCodeMstr.sql" />
     <Build Include="Procedures\code_mstr\UpdCodeMstr.sql" />
     <Build Include="Procedures\code_mstr\DelCodeMstr.sql" />
     <Build Include="Procedures\code_mstr\GetCodeMstr.sql" />
+    <Build Include="Procedures\Music\PaginateMusic.sql" />
+    <Build Include="Procedures\Music\FindBand.sql" />
+    <Build Include="Procedures\Music\FindEAN.sql" />
+    <Build Include="Procedures\Music\ListBand.sql" />
+    <Build Include="Procedures\code_mstr\GetCodeMstrFirst.sql" />
+    <Build Include="Procedures\code_mstr\ListFldName.sql" />
+    <Build Include="Procedures\code_mstr\GetCodeMstrOne.sql" />
+    <Build Include="Tables\Books.sql" />
+    <Build Include="Procedures\Books\AddBook.sql" />
+    <Build Include="Procedures\Books\DelBook.sql" />
+    <Build Include="Procedures\Books\UpdBook.sql" />
+    <Build Include="Views\V_Book_Full.sql" />
+    <Build Include="Views\V_Books.sql" />
+    <Build Include="Procedures\Books\ListSerie.sql" />
+    <Build Include="Procedures\Books\FindEANBooks.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostScript\Script.PostDeployment1.sql" />

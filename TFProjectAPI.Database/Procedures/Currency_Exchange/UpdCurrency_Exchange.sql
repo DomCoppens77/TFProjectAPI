@@ -8,8 +8,8 @@
 AS
 BEGIN
 	UPDATE [Currency_Exchange] SET
-	[CurrFrom] = trim(@CurrF),
-	[CurrTo]   = trim(@CurrT),
+	[CurrFrom] = UPPER(TRIM(@CurrF)),
+	[CurrTo]   = UPPER(TRIM(@CurrT)),
 	[DateFrom] = @DateF,
 	[DateTo] = @DateT,
 	[Rate] = @Rate

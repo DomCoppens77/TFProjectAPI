@@ -5,7 +5,7 @@
 AS
 BEGIN
 	UPDATE [Country] SET
-	[Ctry] = trim(@Ctry),
+	[Ctry] = RTRIM(@Ctry),
 	[IsEU] = @IsEU
-	WHERE [ISO] = @ISO;
+	WHERE [ISO] = UPPER(@ISO);
 END

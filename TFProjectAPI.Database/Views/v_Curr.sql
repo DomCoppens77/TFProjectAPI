@@ -1,2 +1,2 @@
-﻿CREATE VIEW [AppUser].[v_Curr]
+﻿CREATE VIEW [AppUser].[V_Curr]
 	AS SELECT * FROM [Currency]

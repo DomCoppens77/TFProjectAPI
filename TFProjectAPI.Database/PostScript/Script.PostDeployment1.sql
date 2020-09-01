@@ -17,6 +17,7 @@ exec [AppUser].[AddUser] @LastName = 'Loubris', @FirstName= 'Isabelle', @Email =
 UPDATE [Users] SET	[Status] = 0	WHERE [Id] = 1;
 
 exec [dbo].[AddGeneralType] @Name = 'Music';
+exec [dbo].[AddGeneralType] @Name = 'Books';
 
 exec [AppUser].[AddMusicFormat]  @Name = '12"';
 exec [AppUser].[AddMusicFormat]  @Name = '7"';
@@ -303,6 +304,13 @@ exec [AppUser].[AddCodeMstr] @code_fldname = N'Country', @code_value = N'RU', @c
 exec [AppUser].[AddCodeMstr] @code_fldname = N'Country', @code_value = N'GR', @code_desc = N'Greece';
 exec [AppUser].[AddCodeMstr] @code_fldname = N'Country', @code_value = N'CN', @code_desc = N'China';
 exec [AppUser].[AddCodeMstr] @code_fldname = N'Country', @code_value = N'FI', @code_desc = N'Finland';
+exec [AppUser].[AddCodeMstr] @code_fldname = N'CONFIGURATION', @code_value = N'JUMP_MUSIC', @code_desc = N'40';
+exec [AppUser].[AddCodeMstr] @code_fldname = N'CONFIGURATION', @code_value = N'JUMP_BOOK', @code_desc = N'40';
+exec [AppUser].[AddCodeMstr] @code_fldname = N'BOOK_LANG', @code_value = N'FR', @code_desc = N'Francais';
+exec [AppUser].[AddCodeMstr] @code_fldname = N'BOOK_LANG', @code_value = N'US', @code_desc = N'English';
+exec [AppUser].[AddCodeMstr] @code_fldname = N'BOOL_FRMT', @code_value = N'Poche', @code_desc = N'';
+exec [AppUser].[AddCodeMstr] @code_fldname = N'BOOL_FRMT', @code_value = N'Broché', @code_desc = N'';
+exec [AppUser].[AddCodeMstr] @code_fldname = N'BOOL_FRMT', @code_value = N'Cartoné', @code_desc = N'';
 
 exec [AppUser].[AddMusic] @Price = '450', @Curr = N'BEF', @ShopId = 1, @Date = '', @OTypeId = 1, @Signed = 0, @SignedBy = N'', @EAN = N'093624559528', @EAN_EXT = N'', @Comment1 = N'Collector CD Box', @Comment2 = N'', @Band = N'Biohazard', @Title = N'State Of The Wolrd Address (Ltd Edition)', @YEAR = 1994, @TRACKS = '14', @NbCDs = 1, @NbDvds = 0, @NbLps = 0, @MTypeId = 3, @FormatId = 3, @SerialNbr = N'9362-45595-2', @Ctry = '';
 exec [AppUser].[AddMusic] @Price = '450', @Curr = N'BEF', @ShopId = 32, @Date = '', @OTypeId = 1, @Signed = 0, @SignedBy = N'', @EAN = N'075992667326', @EAN_EXT = N'', @Comment1 = N'', @Comment2 = N'', @Band = N'The Cult', @Title = N'Ceremony (Import US)', @YEAR = 1991, @TRACKS = '11', @NbCDs = 1, @NbDvds = 0, @NbLps = 0, @MTypeId = 3, @FormatId = 3, @SerialNbr = N'9 26673-2', @Ctry = 'US';
