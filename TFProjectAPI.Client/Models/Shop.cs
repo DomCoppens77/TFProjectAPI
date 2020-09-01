@@ -20,7 +20,6 @@
 
         public Shop(int id, string name, string address1, string address2, string zip, string city, string country, string phone, string email, string website, string localisationUrl, bool closed)
         {
-
             Id = id;
             Name = name;
             Address1 = address1;
@@ -28,7 +27,7 @@
             ZIP = zip;
             City = city;
             Country = country;
-            Phone = Phone;
+            Phone = phone;
             Email = email;
             WebSite = website;
             LocalisationURL = localisationUrl;

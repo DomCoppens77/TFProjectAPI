@@ -10,8 +10,8 @@ namespace TFProjectAPI.Global.Mappers
         {
             return new Country()
             {
-                ISO = (string)dr["ISO"],
-                Ctry = (string)dr["Ctry"],
+                ISO = dr["ISO"].ToString(),
+                Ctry = dr["Ctry"].ToString(),
                 IsEU = (bool)dr["IsEU"]
             };
 

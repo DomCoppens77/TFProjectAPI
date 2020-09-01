@@ -20,8 +20,8 @@ namespace TFProjectAPI.Client.Models
 
         public Music(int id, string band, string title, int yEAR, string tRACKS, int nbCDs, int nbDvds, int nbLps, int mTypeId, int formatId, string serialNbr, string ctry,
             string typeStr,string formatStr, 
-            float price, string curr, int shopId, DateTime date, int typeId, bool signed, string signedBy, string eAN, string eAN_EXT, string comment1, string comment2, bool onwed) 
-            : base (id, price, curr, shopId, date, typeId, signed, signedBy, eAN, eAN_EXT, comment1, comment2, onwed)
+            float price, string curr, int shopId,string shopStr, DateTime? date, int typeId, bool signed, string signedBy, string eAN, string eAN_EXT, string comment1, string comment2, bool onwed) 
+            : base (id, price, curr, shopId, shopStr, date, typeId, signed, signedBy, eAN, eAN_EXT, comment1, comment2, onwed)
         {
             Band = band;
             Title = title;

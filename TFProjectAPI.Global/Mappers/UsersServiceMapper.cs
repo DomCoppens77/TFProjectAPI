@@ -13,9 +13,9 @@ namespace TFProjectAPI.Global.Mappers
             return new User()
             {
                 Id = (int)dr["Id"],
-                FirstName = (string)dr["FirstName"],
-                LastName = (string)dr["LastName"],
-                Email = (string)dr["Email"],
+                FirstName = (dr["FirstName"] == DBNull.Value) ? "" : dr["FirstName"].ToString(),
+                LastName = (dr["LastName"] == DBNull.Value) ? "" : dr["LastName"].ToString(),
+                Email = dr["Email"].ToString(),
                 Active = (bool)dr["Active"],
                 Status = (int)dr["Status"],
                 ConnectionCount = (int)dr["ConnectionCount"],

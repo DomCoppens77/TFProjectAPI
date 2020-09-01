@@ -10,8 +10,8 @@ namespace TFProjectAPI.Global.Mappers
         {
             return new Currency_Exchange()
             {
-                CurrFrom = (string)dr["CurrFrom"],
-                CurrTo = (string)dr["CurrTo"],
+                CurrFrom = dr["CurrFrom"].ToString(),
+                CurrTo = dr["CurrTo"].ToString(),
                 DateFrom = (DateTime)dr["DateFrom"],
                 DateTo = (DateTime)dr["DateTo"],
                 Rate = (float)(double)dr["Rate"]

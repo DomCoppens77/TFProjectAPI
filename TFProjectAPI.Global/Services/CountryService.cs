@@ -21,7 +21,7 @@ namespace TFProjectAPI.Global.Services
 
         public bool Del(string ISO)
         {
-            DBCommand command = new DBCommand("[AppUser].[DelCurr]", true);
+            DBCommand command = new DBCommand("[AppUser].[DelCtry]", true);
             command.AddParameter("ISO", ISO);
 
             return ServiceLocator.Instance.Connection.ExecuteNonQuery(command) == 1;

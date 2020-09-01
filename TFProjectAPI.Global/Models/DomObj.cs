@@ -8,7 +8,8 @@ namespace TFProjectAPI.Global.Models
 		public float    Price    { get; set; }
 		public string   Curr     { get; set; }
 		public int      ShopId   { get; set; }
-		public DateTime Date     { get; set; }
+		public string   ShopName { get; set; }
+		public DateTime? Date     { get; set; }
 		public int      TypeId   { get; set; }
 		public bool     Signed   { get; set; }
 		public string   SignedBy { get; set; }

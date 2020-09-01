@@ -27,6 +27,7 @@ namespace TFProjectAPI.Client.Services
             serviceCollection.AddScoped<ICurrency_Exchange<Currency_Exchange>, Currency_ExchangeService>();
             serviceCollection.AddScoped<IMusicService<Music>, MusicService>();
             serviceCollection.AddScoped<ICountryService<Country>, CountryService>();
+            serviceCollection.AddScoped<ICodeMstrService<Code_Mstr>, CodeMstrService>();
         }
 
         public IUsersService<User> usersService
@@ -71,6 +72,11 @@ namespace TFProjectAPI.Client.Services
         public ICountryService<Country> CountryService
         {
             get { return Container.GetService<ICountryService<Country>>(); }
+        }
+
+        public ICodeMstrService<Code_Mstr> CodeMstrService
+        {
+            get { return Container.GetService<ICodeMstrService<Code_Mstr>>(); }
         }
 
     }

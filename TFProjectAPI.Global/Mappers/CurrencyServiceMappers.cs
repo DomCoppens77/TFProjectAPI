@@ -10,8 +10,8 @@ namespace TFProjectAPI.Global.Mappers
         {
             return new Currency()
             {
-                Curr = (string)dr["Curr"],
-                Desc = (string)dr["Description"]
+                Curr = dr["Curr"].ToString(),
+                Desc = dr["Description"].ToString()
             };
 
         }

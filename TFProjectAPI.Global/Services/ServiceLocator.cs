@@ -47,6 +47,8 @@ namespace TFProjectAPI.Global.Services
             serviceCollection.AddScoped<IMusicFormatService<MusicFormat>, MusicFormatService>();
             serviceCollection.AddScoped<IMusicService<Music>, MusicService>();
 
+            serviceCollection.AddScoped<ICodeMstrService<Code_Mstr>, CodeMstrService>();
+
         }
 
         internal IConnection Connection
@@ -95,6 +97,11 @@ namespace TFProjectAPI.Global.Services
         public ICountryService<Country> CountryService
         {
             get { return Container.GetService<ICountryService<Country>>(); }
+        }
+
+        public ICodeMstrService<Code_Mstr> CodeMstrService
+        {
+            get { return Container.GetService<ICodeMstrService<Code_Mstr>>(); }
         }
     }
 }

@@ -49,6 +49,20 @@ namespace TFProjectAPI.Global.Services
             return 1 == ServiceLocator.Instance.Connection.ExecuteNonQuery(command);
         }
 
+        public IEnumerable<Music> FindBand(string band)
+        {
+            DBCommand command = new DBCommand("[AppUser].[FindBand]", true);
+            command.AddParameter("Band", band);
+            return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToMusic());
+        }
+
+        public IEnumerable<Music> FindEan(string ean)
+        {
+            DBCommand command = new DBCommand("[AppUser].[FindEAN]", true);
+            command.AddParameter("EAN", ean);
+            return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToMusic());
+        }
+
         public IEnumerable<Music> Get()
         {
             DBCommand command = new DBCommand("Select * From [AppUser].[V_Music_Full];");
@@ -60,6 +74,30 @@ namespace TFProjectAPI.Global.Services
             DBCommand command = new DBCommand("Select * From [AppUser].[V_Music_Full] Where [Id] = @Id;");
             command.AddParameter("Id", id);
             return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToMusic()).SingleOrDefault();
+        }
+
+        public IEnumerable<Music> GetPage(int page, int jump)
+        {
+
+
+            DBCommand command = new DBCommand("[AppUser].[PaginateMusic]", true);
+            command.AddParameter("page", page);
+            command.AddParameter("jump", jump);
+            return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToMusic());
+        }
+
+        public int GetPageCount(int jump)
+        {
+            DBCommand commandP = new DBCommand("[AppUser].[CountPage]", true);
+            commandP.AddParameter("Jump", jump);
+            return (int)ServiceLocator.Instance.Connection.ExecuteScalar(commandP);
+        }
+
+
+        public IEnumerable<string> ListBand()
+        {
+            DBCommand command = new DBCommand("[AppUser].[ListBand]", true);
+            return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => { return dr["Band"].ToString(); });
         }
 
         public bool Upd(Music mu)

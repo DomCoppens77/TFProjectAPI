@@ -11,7 +11,7 @@ namespace TFProjectAPI.Global.Mappers
             return new MusicType()
             {
                 Id = (int)dr["Id"],
-                Name = (string)dr["Name"]
+                Name = dr["Name"].ToString()
             };
         }
     }

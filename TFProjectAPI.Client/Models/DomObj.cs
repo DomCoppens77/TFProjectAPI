@@ -8,7 +8,8 @@ namespace TFProjectAPI.Client.Models
 		private float _price;
 		private string _curr;
 		private int _shopId;
-		private DateTime _date;
+        private string _shopName;
+		private DateTime? _date;
 		private int _typeId;
 		private bool _signed;
 		private string _signedBy;
@@ -18,12 +19,13 @@ namespace TFProjectAPI.Client.Models
 		private string _comment2;
 		private bool _onwed;
 
-        public DomObj(int id, float price, string curr, int shopId, DateTime date, int typeId, bool signed, string signedBy, string eAN, string eAN_EXT, string comment1, string comment2, bool onwed)
+        public DomObj(int id, float price, string curr, int shopId, string shopName, DateTime? date, int typeId, bool signed, string signedBy, string eAN, string eAN_EXT, string comment1, string comment2, bool onwed)
         {
             Id = id;
             Price = price;
             Curr = curr;
             ShopId = shopId;
+            ShopName = shopName;
             Date = date;
             TypeId = typeId;
             Signed = signed;
@@ -90,7 +92,7 @@ namespace TFProjectAPI.Client.Models
             }
         }
 
-        public DateTime Date
+        public DateTime? Date
         {
             get
             {
@@ -204,6 +206,19 @@ namespace TFProjectAPI.Client.Models
             set
             {
                 _onwed = value;
+            }
+        }
+
+        public string ShopName
+        {
+            get
+            {
+                return _shopName;
+            }
+
+            set
+            {
+                _shopName = value;
             }
         }
     }
