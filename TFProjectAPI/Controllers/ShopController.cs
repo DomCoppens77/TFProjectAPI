@@ -23,7 +23,8 @@ namespace TFProjectAPI.Controllers
         /// </summary>
         /// <returns>List of Shop Data</returns>
         [HttpGet]
-        [Authorize(Roles = "0,1")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "0,1")]
         public IActionResult GetAll()
         {
             try
@@ -86,7 +87,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
+                //if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
                 SM.Shop s = new SM.Shop(0, sadd.Name, sadd.Address1, sadd.Address2, sadd.ZIP, sadd.City, sadd.Country, sadd.Phone, sadd.Email, sadd.WebSite, sadd.LocalisationURL, sadd.Closed);
                 s = S.ServiceLocator.Instance.shopService.Add(s);
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.Shop>(HttpStatusCode.OK, null, s), true);
@@ -127,7 +128,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
+                //if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
                 SM.Shop s = new SM.Shop(id, supd.Name, supd.Address1, supd.Address2, supd.ZIP, supd.City, supd.Country, supd.Phone, supd.Email, supd.WebSite, supd.LocalisationURL, supd.Closed);
                 bool UpdOk = S.ServiceLocator.Instance.shopService.Upd(s);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, UpdOk), HttpStatusCode.OK);

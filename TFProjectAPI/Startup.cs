@@ -28,6 +28,7 @@ namespace TFProjectAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors();
             services.AddTokenAuthentication(Configuration); // DCO Token iD Token ID
 
             //services.AddTransient((x) => new TokenService(
@@ -138,6 +139,12 @@ namespace TFProjectAPI
             {
                 endpoints.MapControllers();
             });
+
+            /* https://code-maze.com/enabling-cors-in-asp-net-core/ */
+
+            //app.UseCors(builder => builder.WithOrigins("http://localhost:4200")); //CORS // mettre dans un fichier config
+            app.UseCors(builder => builder.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+
         }
     }
 }

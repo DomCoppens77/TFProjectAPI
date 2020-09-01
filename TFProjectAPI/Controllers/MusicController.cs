@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using TFProjectAPI.Client.Models;
 using TFProjectAPI.Helper;
 using TFProjectAPI.Models.API;
 using TFProjectAPI.Models.API.Music;
@@ -23,7 +24,7 @@ namespace TFProjectAPI.Controllers
         /// </summary>
         /// <returns>List Of Music Data</returns>
         [HttpGet]
-        [Authorize(Roles = "0,1")]
+        [Authorize(Roles = "0")]
         public IActionResult GetAll()
         {
             
@@ -50,6 +51,42 @@ namespace TFProjectAPI.Controllers
             try
             {
                 SM.Music mus = S.ServiceLocator.Instance.MusicService.Get(id);
+                return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, mus), true);
+            }
+            catch (Exception ex)
+            {
+                return ApiControllerHelper.SendError(this, ex);
+            }
+        }
+
+        /// <summary>
+        /// Get a List of All Music record(s) per page of XX records in the Database (from page 1 to xxx)
+        /// </summary>
+        /// <returns>List Of Music Data</returns>
+        [HttpGet("{page}")]
+        [Authorize(Roles = "0,1")]
+        public IActionResult GetPage(int page)
+        {
+            try
+            {
+                int jump, records, maxpages = 1;
+                Code_Mstr cdm = S.ServiceLocator.Instance.CodeMstrService.Get(new Code_Mstr("CONFIGURATION", "JUMP_MUSIC", ""));
+                if (!int.TryParse(cdm.Code_Desc, out jump)) jump = 50;
+
+                records = S.ServiceLocator.Instance.GeneralTypeService.IsUsed(1);
+
+                if (records > jump)
+                {
+                    maxpages = records / jump;
+                    if (records % jump > 0) maxpages += 1;
+                }
+
+                IEnumerable<SM.Music> mus = null;
+                // int pages = S.ServiceLocator.Instance.MusicService.GetPageCount(jump);
+                if (page <= maxpages)
+                {
+                    mus = S.ServiceLocator.Instance.MusicService.GetPage(page, jump);
+                }
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, mus), true);
             }
             catch (Exception ex)
@@ -97,18 +134,17 @@ namespace TFProjectAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "0")]
-        public IActionResult Add([FromBody] Music mus)
+        public IActionResult Add([FromBody] MusicAPI mus)
         {
             try
             {
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
                 SM.GeneralType G = S.ServiceLocator.Instance.GeneralTypeService.Get(1);
                 if (G is null) throw new ValidationException("Music Model don't exist in General List");
 
                 SM.Music musa = new SM.Music(0
                     , mus.Band, mus.Title, mus.YEAR, mus.TRACKS, mus.NbCDs, mus.NbDvds, mus.NbLps, mus.MTypeId, mus.FormatId, mus.SerialNbr, mus.Ctry,
                     "","",
-                    mus.Price, mus.Curr, mus.ShopId, mus.Date,1, mus.Signed, mus.SignedBy, mus.EAN, mus.EAN_EXT, mus.Comment1, mus.Comment2, mus.Onwed
+                    mus.Price, mus.Curr, mus.ShopId,"", mus.Date,1, mus.Signed, mus.SignedBy, mus.EAN, mus.EAN_EXT, mus.Comment1, mus.Comment2, mus.Onwed
                     );
 
                 musa = S.ServiceLocator.Instance.MusicService.Add(musa);
@@ -162,19 +198,18 @@ namespace TFProjectAPI.Controllers
         /// <returns></returns>
         [HttpPut("{id}")]
         [Authorize(Roles = "0")]
-        public IActionResult Upd(int id, [FromBody] Music mus)
+        public IActionResult Upd(int id, [FromBody] MusicAPI mus)
         {
             //return S.ServiceLocator.Instance.MusicService.Upd(muso);
             try
             {
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
                 SM.GeneralType G = S.ServiceLocator.Instance.GeneralTypeService.Get(1);
                 if (G is null) throw new ValidationException("Music Model don't exist in General List");
 
                 SM.Music musa = new SM.Music(id
                     , mus.Band, mus.Title, mus.YEAR, mus.TRACKS, mus.NbCDs, mus.NbDvds, mus.NbLps, mus.MTypeId, mus.FormatId, mus.SerialNbr, mus.Ctry,
                     "", "",
-                    mus.Price, mus.Curr, mus.ShopId, mus.Date, 1, mus.Signed, mus.SignedBy, mus.EAN, mus.EAN_EXT, mus.Comment1, mus.Comment2, mus.Onwed
+                    mus.Price, mus.Curr, mus.ShopId,"", mus.Date, 1, mus.Signed, mus.SignedBy, mus.EAN, mus.EAN_EXT, mus.Comment1, mus.Comment2, mus.Onwed
                     );
 
                 bool UpdOk = S.ServiceLocator.Instance.MusicService.Upd(musa);
@@ -197,6 +232,65 @@ namespace TFProjectAPI.Controllers
             {
                 bool DelOk = S.ServiceLocator.Instance.MusicService.Del(id);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, DelOk), HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return ApiControllerHelper.SendError(this, ex);
+            }
+        }
+
+        /// <summary>
+        /// Get a List of All Bands in the Database
+        /// </summary>
+        /// <returns>List Of Bands Data</returns>
+        [HttpGet]
+        [Authorize(Roles = "0,1")]
+        public IActionResult ListBands()
+        {
+            try
+            {
+                IEnumerable<string> bands = S.ServiceLocator.Instance.MusicService.ListBand();
+                return ApiControllerHelper.SendOk(this, new ApiResult<string>(HttpStatusCode.OK, null, bands), true);
+            }
+            catch (Exception ex)
+            {
+                return ApiControllerHelper.SendError(this, ex);
+            }
+        }
+
+        /// <summary>
+        /// Get List of Music record in the Database according to Band pass in parameter
+        /// </summary>
+        /// <param name="band">Band seached</param>
+        /// <returns>A Music Data Linked to that Particular BAND</returns>
+        [HttpGet("{band}")]
+        [Authorize(Roles = "0,1")]
+        public IActionResult GetBand(string band)
+        {
+            try
+            {
+                IEnumerable<SM.Music> mus = S.ServiceLocator.Instance.MusicService.FindBand(band);
+                return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, mus), true);
+            }
+            catch (Exception ex)
+            {
+                return ApiControllerHelper.SendError(this, ex);
+            }
+        }
+
+        /// <summary>
+        /// Get List of Music record in the Database according to EAN pass in parameter
+        /// </summary>
+        /// <param name="ean">EAN code seached</param>
+        /// <returns>A Music Data Linked to that Particular EAN Code</returns>
+        [HttpGet("{ean}")]
+        [Authorize(Roles = "0,1")]
+        public IActionResult GetEan(string ean)
+        {
+            try
+            {
+                IEnumerable<SM.Music> mus = S.ServiceLocator.Instance.MusicService.FindEan(ean);
+                return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, mus), true);
             }
             catch (Exception ex)
             {

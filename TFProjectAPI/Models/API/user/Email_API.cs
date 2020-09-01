@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TFProjectAPI.Attributes;
 
 namespace TFProjectAPI.Models.API.user
 {
@@ -6,7 +7,7 @@ namespace TFProjectAPI.Models.API.user
     {
         [Required]
         [StringLength(320, MinimumLength = 1)]
-        [RegularExpression(@"^[_a-z0-9-]+(.[a-z0-9-]+)@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$")]
+        [RegExEMAIL]
         public string Email { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TFProjectAPI.Models.API.Music
 {
-    public class Music
+    public class MusicAPI
     {
 		/* DOMOBJ*/
 		public float Price { get; set; }

@@ -337,7 +337,7 @@ namespace TFProjectAPI.Controllers
             {
                 JwtService jwt = new JwtService(_config);
                 JWTB.id = u.Id;
-                JWTB.ExpirationDateTime = DateTime.UtcNow.AddMinutes(double.Parse(_config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value));
+                JWTB.ExpirationDateTime = DateTime.Now.AddMinutes(double.Parse(_config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value));
                 JWTB.BearerJWT = jwt.GenerateSecurityToken(u.Email, u.Status.ToString(), u.Id.ToString()); ;
             }
             return JWTB;

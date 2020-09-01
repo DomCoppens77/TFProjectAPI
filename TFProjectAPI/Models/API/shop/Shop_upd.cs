@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
+using TFProjectAPI.Attributes;
 
 namespace TFProjectAPI.Models.API.shop
 {
@@ -17,7 +19,8 @@ namespace TFProjectAPI.Models.API.shop
 		public string Country { get; set; }
 		public string Phone { get; set; }
 
-		[RegularExpression(@"^[_a-z0-9-]+(.[a-z0-9-]+)@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$")]
+		[RegExEMAILIfFilled]
+		//[EmailAddress]
 		public string Email { get; set; }
 		public string WebSite { get; set; }
 		public string LocalisationURL { get; set; }
