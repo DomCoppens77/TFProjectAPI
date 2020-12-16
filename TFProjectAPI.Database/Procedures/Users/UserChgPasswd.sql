@@ -4,8 +4,8 @@
 	@Passwd  NVARCHAR(20)
 AS
 BEGIN
-	if (SELECT count(*) from [Users] where [Email] = @Email and [Passwd] = HASHBYTES('SHA2_512', [dbo].[GetPreSalt]() + @OldPasswd + [dbo].[GetPostSalt]()) and [Active] = 1) > 0 
+	if (SELECT count(*) from [Users] where [Email] = @Email and [Passwd] = [dbo].[GetHashPasswd](@OldPasswd) and [Active] = 1) > 0 
 		UPDATE [Users] 
-			SET	[Passwd] = HASHBYTES('SHA2_512', [dbo].[GetPreSalt]() + @Passwd + [dbo].[GetPostSalt]())
+			SET	[Passwd] = [dbo].[GetHashPasswd](@Passwd)
 			WHERE [Email] = @Email;
 END

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using TFProjectAPI.Client.Mappers;
 using TFProjectAPI.Client.Models;
@@ -9,34 +11,48 @@ namespace TFProjectAPI.Client.Services
 {
     public class MusicFormatService : IMusicFormatService<MusicFormat>
     {
-        public MusicFormat Add(MusicFormat mf)
-        {
-            return GS.Instance.MusicFormatService.Add(mf.ToGlobal()).ToClient();
-        }
-
-        public bool Del(int id)
-        {
-            return GS.Instance.MusicFormatService.Del(id);
-        }
-
+        private string where = "CMF";
         public IEnumerable<MusicFormat> Get()
         {
-            return GS.Instance.MusicFormatService.Get().Select(mf => mf.ToClient());
+            try { return GS.Instance.MusicFormatService.Get().Select(mf => mf.ToClient()); }
+            catch (Exception e) { throw e; }
         }
 
         public MusicFormat Get(int id)
         {
-            return GS.Instance.MusicFormatService.Get(id)?.ToClient();
+            try { return GS.Instance.MusicFormatService.Get(id)?.ToClient(); }
+            catch (Exception e) { throw e; }
+        }
+        public MusicFormat Add(MusicFormat mf)
+        {
+            try
+            {
+                if (mf is null) throw new DataException("Music Format Data empty (" + where + ") (ADD)");
+                if (mf.Name.Length < 1) throw new DataException("Issue with Data entered for Add (" + where + ") (ADD)");
+                return GS.Instance.MusicFormatService.Add(mf.ToGlobal()).ToClient();
+            }
+            catch (Exception e) { throw e; }
+        }
+        public bool Upd(MusicFormat mf)
+        {
+            try
+            {
+                if (mf is null) throw new DataException("Music Type Data empty (" + where + ") (UPD)");
+                if (mf.Name.Length < 1) throw new DataException("Issue with Data entered for Add (" + where + ") (UPD)");
+                return GS.Instance.MusicFormatService.Upd(mf.ToGlobal());
+            }
+            catch (Exception e) { throw e; }
+        }
+        public bool Del(int id)
+        {
+            try { return GS.Instance.MusicFormatService.Del(id); }
+            catch (Exception e) { throw e; }
         }
 
         public int MusicFormatIsUsed(int id)
         {
-            return GS.Instance.MusicFormatService.MusicFormatIsUsed(id);
-        }
-
-        public bool Upd(MusicFormat mf)
-        {
-            return GS.Instance.MusicFormatService.Upd(mf.ToGlobal());
+            try { return GS.Instance.MusicFormatService.MusicFormatIsUsed(id); }
+            catch (Exception e) { throw e; }
         }
     }
 }

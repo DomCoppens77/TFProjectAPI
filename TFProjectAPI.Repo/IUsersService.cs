@@ -5,7 +5,6 @@ namespace TFProjectAPI.Repo
     public interface IUsersService<TUser>
     {
         IEnumerable<TUser> Get();
-
         TUser Get(int id);
 
         TUser Add(TUser user);
@@ -14,10 +13,14 @@ namespace TFProjectAPI.Repo
 
         bool Del(int id);
 
-        void ChangePasswd(string email, string oldPasswd, string passwd);
+        bool ChangePasswd(string email, string oldPasswd, string passwd);
+
+        bool ResetPasswd(string email, string secretAnswer, string passwd);
 
         TUser Login(string email, string passwd);
 
         bool EmailIsUsed(string email);
+
+        bool ReactivateUser(int id);
     }
 }

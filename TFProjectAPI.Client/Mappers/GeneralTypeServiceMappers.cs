@@ -17,5 +17,28 @@ namespace TFProjectAPI.Client.Mappers
                 return new GeneralType(gt.Id, gt.Name);
         }
 
+        internal static GM.GenYearPurch ToGlobal(this GenYearPurch yp)
+        {
+            return new GM.GenYearPurch() { Year = yp.Year, TypeId = yp.TypeId, GenTypeName = yp.GenTypeName, Price = yp.Price };
+        }
+
+        internal static GenYearPurch ToClient(this GM.GenYearPurch yp)
+        {
+            if (yp is null) return null;
+            else
+                return new GenYearPurch(yp.Year, yp.TypeId, yp.GenTypeName,yp.Price);
+        }
+
+        internal static GM.GenObjectSearch ToGlobal(this GenObjectSearch gos)
+        {
+            return new GM.GenObjectSearch() { Id = gos.Id, PRICE_EUR = gos.PRICE_EUR, TypeId = gos.TypeId, GenTypeName = gos.GenTypeName, EAN = gos.EAN, EAN_EXT = gos.EAN_EXT, ShopId = gos.ShopId, ShopName = gos.ShopName, OBJTEXT = gos.OBJTEXT };
+        }
+
+        internal static GenObjectSearch ToClient(this GM.GenObjectSearch gos)
+        {
+            if (gos is null) return null;
+            else
+                return new GenObjectSearch(gos.Id, gos.PRICE_EUR, gos.TypeId, gos.GenTypeName, gos.EAN, gos.EAN_EXT, gos.ShopId, gos.ShopName, gos.OBJTEXT);
+        }
     }
 }

@@ -9,29 +9,31 @@ namespace TFProjectAPI.Client.Models
         private string _lastName;
         private string _email;
         private string _passwd;
+        private string _secretAnswer;
         private bool _active;
         private int _status;
         private int _connectionCount;
         private DateTime _connectionLast;
-        private string _oldpasswd;
+        private string _avatar;
 
         public User()
         {
 
         }
 
-        public User(int id, string firstName, string lastName, string email, string passwd, bool active, int status, int connectionCount, DateTime connectionLast, string oldpasswd = "")
+        public User(int id, string firstName, string lastName, string email, string passwd, bool active, int status, int connectionCount, DateTime connectionLast, string secretAnswer, string avatar)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Passwd = passwd;
+            SecretAnswer = secretAnswer;
             Active = active;
             Status = status;
             ConnectionCount = connectionCount;
             ConnectionLast = connectionLast;
-            Oldpasswd = oldpasswd;
+            Avatar = avatar;
         }
 
         public int Id
@@ -151,16 +153,30 @@ namespace TFProjectAPI.Client.Models
             }
         }
 
-        public string Oldpasswd
+
+        public string SecretAnswer
         {
             get
             {
-                return _oldpasswd;
+                return _secretAnswer;
             }
 
             set
             {
-                _oldpasswd = value;
+                _secretAnswer = value;
+            }
+        }
+
+        public string Avatar
+        {
+            get
+            {
+                return _avatar;
+            }
+
+            set
+            {
+                _avatar = value;
             }
         }
     }

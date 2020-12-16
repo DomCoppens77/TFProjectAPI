@@ -26,11 +26,11 @@ AS
 BEGIN
 	DECLARE @ID AS INT;
 
-	exec [dbo].[AddOject] @Price, @Curr, @ShopId, @Date, @OTypeId, @Signed, @SignedBy, @EAN, @EAN_EXT, @Comment1, @Comment2, @ID output;
+	EXEC [dbo].[AddOject] @Price, @Curr, @ShopId, @Date, @OTypeId, @Signed, @SignedBy, @EAN, @EAN_EXT, @Comment1, @Comment2, @ID output;
 
-	Insert into [Books] ([Id], [Serie], [Title], [Writer1], [Writer2], [Language], [Edition], [Format], [Number], [Pages], [YEAR], [FirstPrint]) 
-    output inserted.Id
-	values(@ID, 
+	INSERT INTO [Books] ([Id], [Serie], [Title], [Writer1], [Writer2], [Language], [Edition], [Format], [Number], [Pages], [YEAR], [FirstPrint]) 
+    OUTPUT [inserted].[Id]
+	VALUES(@ID, 
 	TRIM(@Serie),
 	TRIM(@Title),     
 	TRIM(@Writer1),   

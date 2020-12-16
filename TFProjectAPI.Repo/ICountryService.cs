@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO.IsolatedStorage;
 
 namespace TFProjectAPI.Repo
 {
@@ -13,5 +14,7 @@ namespace TFProjectAPI.Repo
         bool Upd(TCountry ctry);
 
         bool Del(string ISO);
+
+        int IsUsed(string ISO);
     }
 }

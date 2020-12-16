@@ -6,7 +6,8 @@
 	@Rate float
 AS
 BEGIN
-	Insert into [Currency_Exchange]([CurrFrom], [CurrTo],[DateFrom],[DateTo],[Rate]) 
-	output inserted.Id
-    values(UPPER(TRIM(@CurrF)), UPPER(TRIM(@CurrT)),@DateF,@DateT,@Rate);
+	IF (@CurrF != @CurrT AND @DateF <= @DateF AND @Rate != 0)
+	INSERT INTO [Currency_Exchange]([CurrFrom], [CurrTo],[DateFrom],[DateTo],[Rate]) 
+	OUTPUT inserted.Id
+    VALUES(UPPER(TRIM(@CurrF)), UPPER(TRIM(@CurrT)),@DateF,@DateT,@Rate);
 END

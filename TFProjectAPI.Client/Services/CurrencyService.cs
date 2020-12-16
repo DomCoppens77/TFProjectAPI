@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using TFProjectAPI.Client.Mappers;
 using TFProjectAPI.Client.Models;
@@ -9,34 +11,50 @@ namespace TFProjectAPI.Client.Services
 {
     public class CurrencyService : ICurrencyService<Currency>
     {
-        public void Add(Currency cur)
-        {
-            GS.Instance.CurrencyService.Add(cur.ToGlobal());
-        }
-
-        public int CurrencyIsUsed(string curr)
-        {
-            return GS.Instance.CurrencyService.CurrencyIsUsed(curr);
-        }
-
-        public bool Del(string curr)
-        {
-            return GS.Instance.CurrencyService.Del(curr);
-        }
-
+        private string where = "CCU";
         public IEnumerable<Currency> Get()
         {
-            return GS.Instance.CurrencyService.Get().Select(c => c.ToClient());
+            
+            try { return GS.Instance.CurrencyService.Get().Select(c => c.ToClient()); }
+            catch (Exception e) { throw e; }
         }
 
         public Currency Get(string curr)
         {
-            return GS.Instance.CurrencyService.Get(curr)?.ToClient();
+            try { return GS.Instance.CurrencyService.Get(curr)?.ToClient(); }
+            catch (Exception e) { throw e; }
+            
+        }
+        public void Add(Currency cur)
+        {
+            try
+            {
+                if (cur is null) throw new DataException("Currency Data empty (" + where + ") (ADD)");
+                GS.Instance.CurrencyService.Add(cur.ToGlobal());
+            }
+            catch (Exception e) { throw e; }
         }
 
         public bool Upd(Currency cur)
         {
-            return GS.Instance.CurrencyService.Upd(cur.ToGlobal());
+            try
+            {
+                if (cur is null) throw new DataException("Currency Data empty (" + where + ") (UPD)");
+                return GS.Instance.CurrencyService.Upd(cur.ToGlobal());
+            }
+            catch (Exception e) { throw e; }
+        }
+
+        public bool Del(string curr)
+        {
+            try { return GS.Instance.CurrencyService.Del(curr); }
+            catch (Exception e) { throw e; }
+        }
+
+        public int CurrencyIsUsed(string curr)
+        {
+            try { return GS.Instance.CurrencyService.CurrencyIsUsed(curr); }
+            catch (Exception e) { throw e; }
         }
     }
 }

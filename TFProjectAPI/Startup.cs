@@ -5,13 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSwag;
 using NSwag.Generation.Processors.Security;
-using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Metadata;
+
 using TFProjectAPI.MiddleWare;
-using TFProjectAPI.ToolBox.Security.JWT;
 
 namespace TFProjectAPI
 {
@@ -102,7 +98,17 @@ namespace TFProjectAPI
                     Description = "Type into the textbox: Bearer {your JWT token}."
                 });
 
-                // Dont forget to go in the XML project and add in  <PropertyGroup> (to allow using the comment in the rest of the program)
+
+                // https://stackoverflow.com/questions/64232175/nswag-how-do-i-add-comments
+
+                // open TFProjectAPI.csproj
+                // <PropertyGroup>
+                //    <TargetFramework > netcoreapp3.1 </ TargetFramework >
+                //    <GenerateDocumentationFile > true </ GenerateDocumentationFile>
+                //    <NoWarn >$(NoWarn); 1591 </ NoWarn >
+                // </PropertyGroup>
+
+                // Dont forget to go in the XML project and add in  <PropertyGroup> (to allow using the comment in the rest of the project)
                 d.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
             });
             

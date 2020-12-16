@@ -11,7 +11,7 @@ namespace TFProjectAPI.Global.Mappers
 
             return new Music()
             {
-                ID = (int)dr["Id"],
+                Id = (int)dr["Id"],
                 Band = dr["Band"].ToString(),
                 Title = dr["Title"].ToString(),
                 YEAR = (int)dr["Year"],

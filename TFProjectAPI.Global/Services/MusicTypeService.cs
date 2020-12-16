@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using TFProjectAPI.Global.Mappers;
 using TFProjectAPI.Global.Models;
@@ -9,56 +11,77 @@ namespace TFProjectAPI.Global.Services
 {
     public class MusicTypeService : IMusicTypeService<MusicType>
     {
-        public MusicType Add(MusicType mt)
-        {
-            DBCommand command = new DBCommand("[AppUser].[AddMusicType]", true);
-            command.AddParameter("Name", mt.Name);
-
-            mt.Id = (int)ServiceLocator.Instance.Connection.ExecuteScalar(command);
-            return mt;
-        }
-
-        public bool Del(int id)
-        {
-            DBCommand command = new DBCommand("[AppUser].[DelMusicType]", true);
-            command.AddParameter("Id", id);
-
-            return 1  == ServiceLocator.Instance.Connection.ExecuteNonQuery(command);
-        }
+        private string where = "GMT";
+        private string Str_Get = "Select * From [AppUser].[V_MusicType]";
 
         public IEnumerable<MusicType> Get()
         {
-            DBCommand command = new DBCommand("Select * From [AppUser].[V_MusicType];");
-            return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToMusicType());
+            try
+            {
+                DBCommand command = new DBCommand(Str_Get + ";");
+                return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToMusicType());
+            }
+            catch (Exception e) { throw e; }
         }
 
         public MusicType Get(int id)
         {
-            DBCommand command = new DBCommand("Select * From [AppUser].[V_MusicType] Where [Id] = @Id;");
-            command.AddParameter("Id", id);
-            return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToMusicType()).SingleOrDefault();
+            try
+            {
+                DBCommand command = new DBCommand(Str_Get + " Where [Id] = @Id;");
+                command.AddParameter("Id", id);
+                return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToMusicType()).SingleOrDefault();
+            }
+            catch (Exception e) { throw e; }
         }
 
-        public int MusicTypeIsUsed(int id)
+        public MusicType Add(MusicType mt)
         {
-            //DBCommand command = new DBCommand("[AppUser].[CheckMusicType]", true);
-            //command.AddParameter("Id", id);
+            try
+            {
+                if (mt is null) throw new DataException("Music Type Data empty (" + where + ") (ADD)");
 
-            DBCommand command = new DBCommand("SELECT COUNT(*) FROM [AppUser].[V_Music] where [MTypeId] = @Id; ");
-            command.AddParameter("Id", id);
-            int i = (int)ServiceLocator.Instance.Connection.ExecuteScalar(command);
-            return i;
-
+                DBCommand command = new DBCommand("[AppUser].[AddMusicType]", true);
+                command.AddParameter("Name", mt.Name);
+                mt.Id = (int)ServiceLocator.Instance.Connection.ExecuteScalar(command);
+                return mt;
+            }
+            catch (Exception e) { throw e; }
         }
 
         public bool Upd(MusicType mt)
         {
-            DBCommand command = new DBCommand("[AppUser].[UpdMusicType]", true);
-            command.AddParameter("Id", mt.Id);
-            command.AddParameter("Name", mt.Name);
+            try
+            {
+                if (mt is null) throw new DataException("Music Type Data empty (" + where + ") (UPD)");
+                DBCommand command = new DBCommand("[AppUser].[UpdMusicType]", true);
+                command.AddParameter("Id", mt.Id);
+                command.AddParameter("Name", mt.Name);
+                return 1 == ServiceLocator.Instance.Connection.ExecuteNonQuery(command);
+            }
+            catch (Exception e) { throw e; }
+        }
 
-            return 1 == ServiceLocator.Instance.Connection.ExecuteNonQuery(command);
+        public bool Del(int id)
+        {
+            try
+            {
+                DBCommand command = new DBCommand("[AppUser].[DelMusicType]", true);
+                command.AddParameter("Id", id);
+                return 1 == ServiceLocator.Instance.Connection.ExecuteNonQuery(command);
+            }
+            catch (Exception e) { throw e; }
+        }
 
+        public int MusicTypeIsUsed(int id)
+        {
+            try
+            {
+                DBCommand command = new DBCommand("[AppUser].[CheckMusicType]", true);
+                command.AddParameter("Id", id);
+                return (int)ServiceLocator.Instance.Connection.ExecuteScalar(command);
+            }
+            catch (Exception e) { throw e; }
         }
     }
 }

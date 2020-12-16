@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Linq;
 using System.Net;
 using TFProjectAPI.Client.Models;
 using TFProjectAPI.Helper;
@@ -19,6 +21,8 @@ namespace TFProjectAPI.Controllers
     [ApiController]
     public class MusicController : ControllerBase
     {
+        private string where = "AMus";
+
         /// <summary>
         /// Get a List of All Music record(s) in the Database
         /// </summary>
@@ -27,16 +31,12 @@ namespace TFProjectAPI.Controllers
         [Authorize(Roles = "0")]
         public IActionResult GetAll()
         {
-            
             try
             {
                 IEnumerable<SM.Music> mus = S.ServiceLocator.Instance.MusicService.Get();
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, mus), true);
             }
-            catch (Exception ex)
-            {
-                return ApiControllerHelper.SendError(this, ex);
-            }
+            catch (Exception ex) { return ApiControllerHelper.SendError(this, ex); }
         }
 
         /// <summary>
@@ -50,13 +50,20 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (GET)");
                 SM.Music mus = S.ServiceLocator.Instance.MusicService.Get(id);
+
+                // OBJECT2 LIST SHOP
+
+                // OBJECT3 LIST MUSIC FORMAT
+
+                // ...
+
+                // creare un object avec totues les auters object.
+
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, mus), true);
             }
-            catch (Exception ex)
-            {
-                return ApiControllerHelper.SendError(this, ex);
-            }
+            catch (Exception ex) { return ApiControllerHelper.SendError(this, ex); }
         }
 
         /// <summary>
@@ -69,30 +76,34 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (page < 1) throw new DataException("Page Number must be at least 1 (" + where + ") (GETPAGE)");
                 int jump, records, maxpages = 1;
                 Code_Mstr cdm = S.ServiceLocator.Instance.CodeMstrService.Get(new Code_Mstr("CONFIGURATION", "JUMP_MUSIC", ""));
-                if (!int.TryParse(cdm.Code_Desc, out jump)) jump = 50;
+                if (cdm is null) jump = 50;
+                else if (!int.TryParse(cdm.Code_Desc, out jump)) jump = 50;
 
                 records = S.ServiceLocator.Instance.GeneralTypeService.IsUsed(1);
-
-                if (records > jump)
-                {
-                    maxpages = records / jump;
-                    if (records % jump > 0) maxpages += 1;
-                }
-
                 IEnumerable<SM.Music> mus = null;
-                // int pages = S.ServiceLocator.Instance.MusicService.GetPageCount(jump);
-                if (page <= maxpages)
+                if (records > 0)
                 {
-                    mus = S.ServiceLocator.Instance.MusicService.GetPage(page, jump);
+                    if (records > jump)
+                    {
+                        maxpages = records / jump;
+                        if (records % jump > 0) maxpages += 1;
+                    }
+
+                    // int pages = S.ServiceLocator.Instance.MusicService.GetPageCount(jump);
+                    if (page <= maxpages)
+                    {
+                        mus = S.ServiceLocator.Instance.MusicService.GetPage(page, jump);
+                    }
+                    if (mus != null && mus.OfType<SM.Music>().Count() == 0) mus = null;
                 }
-                return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, mus), true);
+
+                MusicDTO mdto = new MusicDTO(records, maxpages, page, jump, mus );
+                return ApiControllerHelper.SendOk(this, new ApiResult<MusicDTO>(HttpStatusCode.OK, null, mdto), true);
             }
-            catch (Exception ex)
-            {
-                return ApiControllerHelper.SendError(this, ex);
-            }
+            catch (Exception ex) { return ApiControllerHelper.SendError(this, ex); }
         }
 
         /// <summary>
@@ -138,8 +149,9 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                SM.GeneralType G = S.ServiceLocator.Instance.GeneralTypeService.Get(1);
-                if (G is null) throw new ValidationException("Music Model don't exist in General List");
+                if (mus is null) throw new ArgumentNullException("Music Object Empty (" + where + ") (ADD)");
+                if (mus.Band.Length == 0) throw new DataException("Band Name can't be BLANK (" + where + ") (ADD)");
+                if (mus.Title.Length == 0) throw new DataException("Title can't be BLANK (" + where + ") (ADD)");
 
                 SM.Music musa = new SM.Music(0
                     , mus.Band, mus.Title, mus.YEAR, mus.TRACKS, mus.NbCDs, mus.NbDvds, mus.NbLps, mus.MTypeId, mus.FormatId, mus.SerialNbr, mus.Ctry,
@@ -150,12 +162,8 @@ namespace TFProjectAPI.Controllers
                 musa = S.ServiceLocator.Instance.MusicService.Add(musa);
 
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, musa), true);
-
             }
-            catch (Exception ex)
-            {
-                return ApiControllerHelper.SendError(this, ex);
-            }
+            catch (Exception ex) { return ApiControllerHelper.SendError(this, ex); }
         }
 
         /// <summary>
@@ -200,25 +208,17 @@ namespace TFProjectAPI.Controllers
         [Authorize(Roles = "0")]
         public IActionResult Upd(int id, [FromBody] MusicAPI mus)
         {
-            //return S.ServiceLocator.Instance.MusicService.Upd(muso);
             try
             {
-                SM.GeneralType G = S.ServiceLocator.Instance.GeneralTypeService.Get(1);
-                if (G is null) throw new ValidationException("Music Model don't exist in General List");
-
+                if (mus is null) throw new ArgumentNullException("Music Object Empty (" + where + ") (UPD)");
                 SM.Music musa = new SM.Music(id
                     , mus.Band, mus.Title, mus.YEAR, mus.TRACKS, mus.NbCDs, mus.NbDvds, mus.NbLps, mus.MTypeId, mus.FormatId, mus.SerialNbr, mus.Ctry,
                     "", "",
-                    mus.Price, mus.Curr, mus.ShopId,"", mus.Date, 1, mus.Signed, mus.SignedBy, mus.EAN, mus.EAN_EXT, mus.Comment1, mus.Comment2, mus.Onwed
-                    );
-
+                    mus.Price, mus.Curr, mus.ShopId, "", mus.Date, 1, mus.Signed, mus.SignedBy, mus.EAN, mus.EAN_EXT, mus.Comment1, mus.Comment2, mus.Onwed);
                 bool UpdOk = S.ServiceLocator.Instance.MusicService.Upd(musa);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, UpdOk), HttpStatusCode.OK);
             }
-            catch (Exception ex)
-            {
-                return ApiControllerHelper.SendError(this, ex);
-            }
+            catch (Exception ex) { return ApiControllerHelper.SendError(this, ex); }
         }
         /// <summary>
         /// Delete Music record into table for Admin User(s)
@@ -230,13 +230,9 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                bool DelOk = S.ServiceLocator.Instance.MusicService.Del(id);
-                return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, DelOk), HttpStatusCode.OK);
+                return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, S.ServiceLocator.Instance.MusicService.Del(id)), HttpStatusCode.OK);
             }
-            catch (Exception ex)
-            {
-                return ApiControllerHelper.SendError(this, ex);
-            }
+            catch (Exception ex) { return ApiControllerHelper.SendError(this, ex); }
         }
 
         /// <summary>
@@ -249,13 +245,9 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                IEnumerable<string> bands = S.ServiceLocator.Instance.MusicService.ListBand();
-                return ApiControllerHelper.SendOk(this, new ApiResult<string>(HttpStatusCode.OK, null, bands), true);
+                return ApiControllerHelper.SendOk(this, new ApiResult<string>(HttpStatusCode.OK, null, S.ServiceLocator.Instance.MusicService.ListBand()), true);
             }
-            catch (Exception ex)
-            {
-                return ApiControllerHelper.SendError(this, ex);
-            }
+            catch (Exception ex) { return ApiControllerHelper.SendError(this, ex); }
         }
 
         /// <summary>
@@ -269,13 +261,10 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                IEnumerable<SM.Music> mus = S.ServiceLocator.Instance.MusicService.FindBand(band);
-                return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, mus), true);
+                if (band.Length == 0) throw new DataException("Band Name can't be BLANK (" + where + ") (GETBAND)");
+                return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, S.ServiceLocator.Instance.MusicService.FindBand(band)), true);
             }
-            catch (Exception ex)
-            {
-                return ApiControllerHelper.SendError(this, ex);
-            }
+            catch (Exception ex) { return ApiControllerHelper.SendError(this, ex); }
         }
 
         /// <summary>
@@ -289,13 +278,10 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                IEnumerable<SM.Music> mus = S.ServiceLocator.Instance.MusicService.FindEan(ean);
-                return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, mus), true);
+                if (ean.Length == 0) throw new DataException("EAN can't be BLANK (" + where + ") (GETEAN)");
+                return ApiControllerHelper.SendOk(this, new ApiResult<SM.Music>(HttpStatusCode.OK, null, S.ServiceLocator.Instance.MusicService.FindEan(ean)), true);
             }
-            catch (Exception ex)
-            {
-                return ApiControllerHelper.SendError(this, ex);
-            }
+            catch (Exception ex) { return ApiControllerHelper.SendError(this, ex); }
         }
     }
 }

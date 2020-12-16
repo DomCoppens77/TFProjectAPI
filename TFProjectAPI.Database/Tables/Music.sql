@@ -14,7 +14,7 @@
 	[Ctry] NVARCHAR(2)
 
     CONSTRAINT [PK_Music] PRIMARY KEY ([Id]),
-	CONSTRAINT [FK_Music_Id] FOREIGN KEY ([Id]) REFERENCES [Object]([Id]),
+	CONSTRAINT [FK_Music_Id] FOREIGN KEY ([Id]) REFERENCES [Object]([Id]) ON DELETE CASCADE,
 	CONSTRAINT [FK_Music_TypeId] FOREIGN KEY ([MTypeId]) REFERENCES [MusicType]([Id]),
 	CONSTRAINT [FK_Music_FormatId] FOREIGN KEY ([FormatId]) REFERENCES [MusicFormat]([Id]),
 )

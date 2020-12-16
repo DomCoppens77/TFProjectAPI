@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using TFProjectAPI.Global.Mappers;
 using TFProjectAPI.Global.Models;
@@ -9,62 +11,76 @@ namespace TFProjectAPI.Global.Services
 {
     public class CurrencyService : ICurrencyService<Currency>
     {
-        public void Add(Currency cur)
-        {
-            DBCommand command = new DBCommand("[AppUser].[AddCurr]", true);
-            command.AddParameter("Curr", cur.Curr);
-            command.AddParameter("Desc", cur.Desc);
-
-            ServiceLocator.Instance.Connection.ExecuteScalar(command);
-        }
-
-        public int CurrencyIsUsed(string curr)
-        {
-            //// plante je sais pas pq
-            //DBCommand command = new DBCommand("[AppUser].[CheckCurr]", true);
-            //command.AddParameter("Curr", curr);
-            //return (int)ServiceLocator.Instance.Connection.ExecuteScalar(command);
-
-            //// Cette Version Là aussi
-            //DBCommand command = new DBCommand("[AppUser].[CheckCurr]", true);
-            //command.AddParameter("Curr", curr);
-            //var i = ServiceLocator.Instance.Connection.ExecuteScalar(command);
-            //return (int)i;
-
-            DBCommand command = new DBCommand("SELECT COUNT(*) FROM [AppUser].[V_Object] where [Curr] = @Curr;");
-            command.AddParameter("Curr", curr);
-            int i = (int)ServiceLocator.Instance.Connection.ExecuteScalar(command);
-            return i;
-        }
-
-        public bool Del(string curr)
-        {
-            DBCommand command = new DBCommand("[AppUser].[DelCurr]", true);
-            command.AddParameter("Curr", curr);
-
-            return ServiceLocator.Instance.Connection.ExecuteNonQuery(command) == 1;
-        }
+        private string where = "GCU";
+        private string Str_Get = "Select * From [AppUser].[V_Curr]";
 
         public IEnumerable<Currency> Get()
         {
-            DBCommand command = new DBCommand("Select * From [AppUser].[V_Curr];");
-            return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToCurr());
+            try
+            {
+                DBCommand command = new DBCommand(Str_Get + ";");
+                return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToCurr());
+            }
+            catch (Exception e) { throw e; }
         }
 
         public Currency Get(string curr)
         {
-            DBCommand command = new DBCommand("Select * From [AppUser].[V_Curr] Where [Curr] = @Curr;");
-            command.AddParameter("Curr", curr);
-            return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToCurr()).SingleOrDefault();
+            try
+            {
+                DBCommand command = new DBCommand(Str_Get + " Where [Curr] = @Curr;");
+                command.AddParameter("Curr", curr);
+                return ServiceLocator.Instance.Connection.ExecuteReader(command, dr => dr.ToCurr()).SingleOrDefault();
+            }
+            catch (Exception e) { throw e; }
+        }
+
+        public void Add(Currency cur)
+        {
+            try
+            {
+                if (cur is null) throw new DataException("Currency Data empty (" + where + ") (ADD)");
+                DBCommand command = new DBCommand("[AppUser].[AddCurr]", true);
+                command.AddParameter("Curr", cur.Curr);
+                command.AddParameter("Desc", cur.Desc);
+                ServiceLocator.Instance.Connection.ExecuteScalar(command);
+            }
+            catch (Exception e) { throw e; }
         }
 
         public bool Upd(Currency cur)
         {
-            DBCommand command = new DBCommand("[AppUser].[UpdCurr]", true);
-            command.AddParameter("Curr", cur.Curr);
-            command.AddParameter("Desc", cur.Desc);
+            try
+            {
+                if (cur is null) throw new DataException("Currency Data empty (" + where + ") (UPD)");
+                DBCommand command = new DBCommand("[AppUser].[UpdCurr]", true);
+                command.AddParameter("Curr", cur.Curr);
+                command.AddParameter("Desc", cur.Desc);
+                return ServiceLocator.Instance.Connection.ExecuteNonQuery(command) == 1;
+            }
+            catch (Exception e) { throw e; }
+        }
 
-            return ServiceLocator.Instance.Connection.ExecuteNonQuery(command) == 1;
+        public bool Del(string curr)
+        {
+            try
+            {
+                DBCommand command = new DBCommand("[AppUser].[DelCurr]", true);
+                command.AddParameter("Curr", curr);
+                return ServiceLocator.Instance.Connection.ExecuteNonQuery(command) == 1;
+            }
+            catch (Exception e) { throw e; }
+        }
+
+        public int CurrencyIsUsed(string curr)
+        {
+            try
+            {
+                DBCommand command = new DBCommand("[AppUser].[CheckCurr]", true);
+                command.AddParameter("Curr", curr);
+                return (int)ServiceLocator.Instance.Connection.ExecuteScalar(command);
+            }
+            catch (Exception e) { throw e; }
         }
     }
 }

@@ -8,6 +8,9 @@ BEGIN
 	SET @PageNumber=@page
 	SET @RowsOfPage=@jump
 
+	IF @PageNumber < 1 SET @PageNumber = 1
+	IF @RowsOfPage < 1 SET @RowsOfPage = 50
+
 	SELECT * FROM [AppUser].[V_Music_Full]
 	ORDER BY [Band] ASC, [YEAR] ASC, [Title] ASC
 	OFFSET (@PageNumber-1)*@RowsOfPage ROWS

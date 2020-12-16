@@ -21,6 +21,7 @@ namespace TFProjectAPI.Controllers
     [ApiController]
     public class CountryController : ControllerBase
     {
+        private string where = "ACTRY";
         /// <summary>
         /// Get a List of All Countries registred in the Database
         /// </summary>
@@ -37,6 +38,7 @@ namespace TFProjectAPI.Controllers
             catch (Exception ex)
             {
                 return ApiControllerHelper.SendError(this, ex);
+
             }
         }
 
@@ -51,6 +53,8 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (iso.Length != 2) throw new IndexOutOfRangeException("Country must be 2 digits (" + where + ") (GET)");
+
                 SM.Country ctry = S.ServiceLocator.Instance.CountryService.Get(iso);
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.Country>(HttpStatusCode.OK, null, ctry), true);
             }
@@ -80,6 +84,9 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (ctry is null) throw new ArgumentNullException("Currency Exchange Object Empty (" + where + ") (ADD)");
+                if (ctry.ISO.Length != 2) throw new IndexOutOfRangeException("Country must be 2 digits (" + where + ") (ADD)");
+
                 SM.Country ctryo = new SM.Country(ctry.ISO, ctry.Ctry, ctry.IsEU);
                 S.ServiceLocator.Instance.CountryService.Add(ctryo);
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.Country>(HttpStatusCode.OK, null, ctryo), true);
@@ -110,6 +117,9 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (ctry is null) throw new ArgumentNullException("Currency Exchange Object Empty (" + where + ") (UPD)");
+                if (ctry.ISO.Length != 2) throw new IndexOutOfRangeException("Country must be 2 digits (" + where + ") (UPD)");
+
                 SM.Country ctryo = new SM.Country(ctry.ISO, ctry.Ctry, ctry.IsEU);
                 bool UpdOk = S.ServiceLocator.Instance.CountryService.Upd(ctryo);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, UpdOk), true);
@@ -130,6 +140,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (iso.Length != 2) throw new IndexOutOfRangeException("Country must be 2 digits (" + where + ") (GET)");
                 bool DelOk = S.ServiceLocator.Instance.CountryService.Del(iso);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, DelOk), HttpStatusCode.OK);
             }
@@ -138,5 +149,22 @@ namespace TFProjectAPI.Controllers
                 return ApiControllerHelper.SendError(this, ex);
             }
         }
+        
+        [HttpGet("{iso}")]
+        [Authorize(Roles = "0,1")]
+        public IActionResult Used([FromRoute] string iso)
+        {
+            try
+            {
+                if (iso.Length != 2) throw new IndexOutOfRangeException("Country must be 2 digits (" + where + ") (GET)");
+                int CtryCnt = S.ServiceLocator.Instance.CountryService.IsUsed(iso);
+                return ApiControllerHelper.SendOk(this, new ApiResult<int>(HttpStatusCode.OK, null, CtryCnt), HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return ApiControllerHelper.SendError(this, ex);
+            }
+        }
+
     }
 }

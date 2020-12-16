@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Net;
 using TFProjectAPI.Helper;
 using TFProjectAPI.Models.API;
@@ -18,13 +19,16 @@ namespace TFProjectAPI.Controllers
     [ApiController]
     public class ShopController : ControllerBase
     {
+
+        private string where = "AS";
+
         /// <summary>
         /// Get a List of All Shops registred in the Database
         /// </summary>
         /// <returns>List of Shop Data</returns>
         [HttpGet]
-        [AllowAnonymous]
-        //[Authorize(Roles = "0,1")]
+        //[AllowAnonymous]
+        [Authorize(Roles = "0,1")]
         public IActionResult GetAll()
         {
             try
@@ -49,6 +53,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (GET)");
                 SM.Shop s = S.ServiceLocator.Instance.shopService.Get(id);
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.Shop>(HttpStatusCode.OK, null, s), true);
             }
@@ -87,6 +92,9 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (sadd is null) throw new ArgumentNullException("Shop Add Object Empty (" + where + ") (ADD)");
+                if (sadd.Name.Length == 0) throw new DataException("Shop Name can't be BLANK (" + where + ") (ADD)");
+
                 //if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
                 SM.Shop s = new SM.Shop(0, sadd.Name, sadd.Address1, sadd.Address2, sadd.ZIP, sadd.City, sadd.Country, sadd.Phone, sadd.Email, sadd.WebSite, sadd.LocalisationURL, sadd.Closed);
                 s = S.ServiceLocator.Instance.shopService.Add(s);
@@ -128,6 +136,10 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (UPD)");
+                if (supd is null) throw new ArgumentNullException("Shop Upd Object Empty (" + where + ") (UPD)");
+                if (supd.Name.Length == 0) throw new DataException("Shop Name can't be BLANK (" + where + ") (UPD)");
+
                 //if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
                 SM.Shop s = new SM.Shop(id, supd.Name, supd.Address1, supd.Address2, supd.ZIP, supd.City, supd.Country, supd.Phone, supd.Email, supd.WebSite, supd.LocalisationURL, supd.Closed);
                 bool UpdOk = S.ServiceLocator.Instance.shopService.Upd(s);
@@ -149,6 +161,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (DEL)");
                 bool DelOk = S.ServiceLocator.Instance.shopService.Del(id);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, DelOk), HttpStatusCode.OK);
             }
@@ -170,6 +183,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (USED)");
                 int shopcnt = S.ServiceLocator.Instance.shopService.ShopIsUsed(id);
                 return ApiControllerHelper.SendOk(this, new ApiResult<int>(HttpStatusCode.OK, null, shopcnt), HttpStatusCode.OK);
             }

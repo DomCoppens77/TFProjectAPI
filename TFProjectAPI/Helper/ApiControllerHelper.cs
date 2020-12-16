@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
 using System.Net;
 using System.Security.Authentication;
 using TFProjectAPI.Models.API;
@@ -57,6 +58,8 @@ namespace TFProjectAPI.Helper
                 case SecurityTokenException e:
                     return instance.StatusCode(498, new ApiResultError(HttpStatusCode.InternalServerError, e));
 
+                case SqlException e: // check if 499 is not taken
+                    return instance.StatusCode(499, new ApiResultError(HttpStatusCode.InternalServerError, e));
                 default:
                     return instance.StatusCode(500, new ApiResultError(HttpStatusCode.InternalServerError, ex));
             }

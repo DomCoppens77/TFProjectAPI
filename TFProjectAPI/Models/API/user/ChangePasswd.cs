@@ -11,13 +11,13 @@ namespace TFProjectAPI.Models.API.user
         public string Email { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 6)]
+        [StringLength(20, MinimumLength = 6)]
         [DataType(DataType.Password)]
         //[RegExPasswd]
         public string OldPasswd { get; set; }
         
         [Required]
-        [StringLength(50, MinimumLength = 6)]
+        [StringLength(20, MinimumLength = 6)]
         [DataType(DataType.Password)]
         //[RegExPasswd]
         public string Passwd { get; set; }

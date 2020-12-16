@@ -58,7 +58,7 @@ namespace TFProjectAPI.Models.API.Music
 		[StringLength(100)]
 		public string SerialNbr { get; set; }
 
-		[StringLength(2, MinimumLength = 2)]
+		[StringLength(2, MinimumLength = 0)]
 		public string Ctry { get; set; }
 
 	}

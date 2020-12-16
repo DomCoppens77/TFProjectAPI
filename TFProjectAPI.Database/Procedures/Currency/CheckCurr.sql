@@ -4,5 +4,5 @@ AS
 BEGIN
 	DECLARE @Cnt INT;
 	SET @Cnt = [dbo].[SF_CountCurr](UPPER(@Curr));
-	RETURN @Cnt;
+	SELECT @Cnt;
 END

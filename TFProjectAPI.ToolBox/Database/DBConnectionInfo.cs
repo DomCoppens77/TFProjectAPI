@@ -6,11 +6,7 @@ namespace TFProjectAPI.ToolBox.Database
 {
     public class DBConnectionInfo : IConnectionInfo
     {
-        public string ConnectionString
-        {
-            get;
-            private set;
-        }
+        public string ConnectionString { get; private set; }
 
         public DBConnectionInfo(string connectionString)
         {

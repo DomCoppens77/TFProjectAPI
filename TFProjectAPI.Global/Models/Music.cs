@@ -2,7 +2,7 @@
 {
     public class Music : DomObj
     {
-		public int    ID        { get; set; }
+		public int    Id        { get; set; }
 		public string Band      { get; set; }
 		public string Title     { get; set; }
 		public int    YEAR      { get; set; }

@@ -4,5 +4,5 @@ AS
 BEGIN
 	DECLARE @Cnt INT;
 	SET @Cnt = [dbo].[SF_CountGenType](@Id);
-	RETURN @Cnt;
+	SELECT @Cnt;
 END

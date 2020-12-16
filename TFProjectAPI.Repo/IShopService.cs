@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TFProjectAPI.Repo
 {
@@ -15,5 +16,6 @@ namespace TFProjectAPI.Repo
         bool Del(int id);
 
         int ShopIsUsed(int id);
+
     }
 }

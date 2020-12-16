@@ -20,7 +20,9 @@ namespace TFProjectAPI.Global.Mappers
                 Status = (int)dr["Status"],
                 ConnectionCount = (int)dr["ConnectionCount"],
                 ConnectionLast = (DateTime)dr["ConnectionLast"],
-                Passwd = "" // Put passwd to BLANK to avoid having NULL
+                SecretAnswer = "",
+                Passwd = "", // Put passwd to BLANK to avoid having NULL
+                Avatar = (dr["Avatar"] == DBNull.Value) ? "" : dr["Avatar"].ToString(),
             };
         }
     }

@@ -8,9 +8,9 @@ namespace TFProjectAPI.MiddleWare
 {
     public static class AuthenticationExtension
     {
-        //Add following Nugget Pack : System.IdentityModel.Tokens.Jwt
-        //Add following Nugget Pack : Microsoft.IdentityModel.Tokens
-        //Add following Nugget Pack : Microsoft.AspNetCore.Authentication.JwtBearer 
+        //Add following Nugget Pack : System.IdentityModel.Tokens.Jwt  // Toolbox
+        //Add following Nugget Pack : Microsoft.IdentityModel.Tokens   // Toolbox
+        //Add following Nugget Pack : Microsoft.AspNetCore.Authentication.JwtBearer  // API
 
         public static IServiceCollection AddTokenAuthentication(this IServiceCollection services, IConfiguration config)
         {

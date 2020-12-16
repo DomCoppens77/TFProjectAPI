@@ -22,6 +22,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <Recovery>SIMPLE</Recovery>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -45,6 +46,7 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <SuppressTSqlWarnings>71502</SuppressTSqlWarnings>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
@@ -147,7 +149,6 @@
     <Build Include="Procedures\Currency_Exchange\AddCurrency_Exchange.sql" />
     <Build Include="Procedures\Currency_Exchange\DelCurrency_Exchange.sql" />
     <Build Include="Procedures\Currency_Exchange\UpdCurrency_Exchange.sql" />
-    <Build Include="Procedures\Object\DelObject.sql" />
     <Build Include="Tables\Country.sql" />
     <Build Include="Procedures\Country\AddCtry.sql" />
     <Build Include="Procedures\Country\UpdCtry.sql" />
@@ -176,6 +177,16 @@
     <Build Include="Views\V_Books.sql" />
     <Build Include="Procedures\Books\ListSerie.sql" />
     <Build Include="Procedures\Books\FindEANBooks.sql" />
+    <Build Include="Procedures\Users\ReactiveUser.sql" />
+    <Build Include="Procedures\Country\CheckCtry.sql" />
+    <Build Include="Procedures\Object\AppYearPurchases.sql" />
+    <Build Include="Functions\Salt\GetHashPasswd.sql" />
+    <Build Include="Procedures\Users\UserResetPasswd.sql" />
+    <Build Include="Procedures\Object\SearchODesc.sql" />
+    <Build Include="Procedures\Object\SearchOEAN.sql" />
+    <Build Include="Procedures\Object\SearchODescCnt.sql" />
+    <Build Include="Procedures\Object\SearchOEANCnt.sql" />
+    <Build Include="Procedures\Music\FindBandBegin.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostScript\Script.PostDeployment1.sql" />

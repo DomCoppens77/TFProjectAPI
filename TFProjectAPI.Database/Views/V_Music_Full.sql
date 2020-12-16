@@ -26,6 +26,14 @@
 	 ,[MusicFormat].[Name] as MusicFormatName
 	 ,[Music].[SerialNbr]
 	 ,[Music].[Ctry]
+	 ,CONVERT(money, 	
+			CASE [Object].[Curr]										
+			WHEN 'EUR' then [Object].[Price]
+			ELSE ROUND([Object].[Price] / (SELECT [ce].[Rate] from [Currency_Exchange] as ce 
+											WHERE [ce].[CurrFrom] = [Object].[Curr] 
+											AND	[Object].[Date] BETWEEN [ce].[DateFrom] AND [ce].[DateTo]) ,2)
+		END) as PRICE_EUR
+
 	FROM [Object] 
 	INNER JOIN [Music]       on [Object].[Id] = [Music].[Id] 
 	INNER JOIN [MusicFormat] on [Music].[FormatId] = [MusicFormat].[Id]

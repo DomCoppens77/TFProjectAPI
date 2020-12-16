@@ -12,6 +12,6 @@
 	[WebSite] NVARCHAR(150),
 	[LocalisationURL] NVARCHAR(255),
 	[Closed] BIT default 1
-    CONSTRAINT [PK_Shop] PRIMARY KEY ([Id]) NOT NULL 
+    CONSTRAINT [PK_Shop] PRIMARY KEY ([Id]) NOT NULL,
 )
 

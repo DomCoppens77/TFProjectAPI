@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Security.Authentication;
@@ -25,12 +26,13 @@ namespace TFProjectAPI.Controllers
     /// <summary>
     /// User Controller :let's you identify yourself + Change Password + and manage Users for Admin
     /// </summary>
-    [Route("api/[controller]/[Action]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
 
     public class UserController : ControllerBase
     {
 
+        private string where = "US";
         private IConfiguration _config;
 
         public UserController(IConfiguration config)
@@ -44,8 +46,6 @@ namespace TFProjectAPI.Controllers
         /// <returns>All Users registred</returns>
         [HttpGet]
         [Authorize(Roles = "0,1")]
-
-        //public string GetAll()
         public IActionResult GetAll()
         {
             try
@@ -70,6 +70,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (GET)");
                 SM.User u = S.ServiceLocator.Instance.usersService.Get(id);
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.User>(HttpStatusCode.OK, null, u), true);
             }
@@ -80,6 +81,7 @@ namespace TFProjectAPI.Controllers
         }
 
         /// <summary>
+        /// 
         /// Add Users into table for Admin User(s)
         /// </summary>
         /// <remarks>
@@ -88,7 +90,8 @@ namespace TFProjectAPI.Controllers
         ///        "Firstname": "Coppens",
         ///        "LastName": "Domnique"
         ///        "Email": "zecoop@gmail.com"
-        ///        "Passwd": "QUJDMTIz"
+        ///        "Passwd": "QUJDMTIz"  (Coded in base 64)
+        ///        "SecretAnswer" : "TVVIQURJQg==" (Coded in base 64)
         ///     }
         /// </remarks>
         /// 
@@ -101,11 +104,9 @@ namespace TFProjectAPI.Controllers
             try
             {
                 if (uadd.FirstName == uadd.LastName)
-                {
-                    ModelState.AddModelError("LastName", "The last name cannot be the same as the first name.");
-                }
+                    throw new ValidationException("The last name cannot be the same as the first name. (" + where + ") (RESET)");
 
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
+                if (uadd.Email.Length == 0) throw new ValidationException("Email empty");
 
                 // checkif email is not taken
                 bool EmailOK = S.ServiceLocator.Instance.usersService.EmailIsUsed(uadd.Email);
@@ -116,8 +117,12 @@ namespace TFProjectAPI.Controllers
                 u.LastName = uadd.LastName;
                 u.Email = uadd.Email;
                 u.Passwd = Base64.Base64Decode(uadd.Passwd);
+                u.SecretAnswer = Base64.Base64Decode(uadd.SecretAnswer);
+                u.Avatar = uadd.Avatar;
 
                 u = S.ServiceLocator.Instance.usersService.Add(u);
+                u.Passwd = "";        /* put passwd BLANK */
+                u.SecretAnswer = "";  /* put Secret BLANK */
 
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.User>(HttpStatusCode.OK, null, u), true);
             }
@@ -137,7 +142,8 @@ namespace TFProjectAPI.Controllers
         ///     {
         ///        "Firstname": "Coppens",
         ///        "LastName": "Domnique"
-        ///        "Email": "zecoop@gmail.com"
+        ///        "Status"  : 1 or 0
+        ///        "Avatar"  : Image in BASE64 or ''
         ///     }
         /// </remarks>
         /// 
@@ -150,29 +156,34 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (UPD)");
+
                 if (uupd.FirstName == uupd.LastName)
                 {
                     ModelState.AddModelError("LastName", "The last name cannot be the same as the first name.");
                 }
 
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
+                //if (uupd.Status > 1) throw new DataException("Wrong USer Status");
 
                 // get user to get all dtata enad mod only need dtat to update and pass user object
                 SM.User u = S.ServiceLocator.Instance.usersService.Get(id);
 
-                if (u is null) throw new AuthenticationException("Record not found for update (" + id.ToString() + ")");
+                if (u is null) throw new AuthenticationException("Record not found for update (" + id.ToString() + ") (" + where + ") (RESET)");
+
 
                 // if email orign VS emailupd <> then check email unique
-                if (u.Email != uupd.Email)
-                {
-                    bool EmailOK = S.ServiceLocator.Instance.usersService.EmailIsUsed(uupd.Email);
-                    if (EmailOK) throw new ValidationException("Email already used :" + uupd.Email);
-                }
+                //if (u.Email != uupd.Email)
+                //{
+                //    bool EmailOK = S.ServiceLocator.Instance.usersService.EmailIsUsed(uupd.Email);
+                //    if (EmailOK) throw new ValidationException("Email already used :" + uupd.Email);
+                //}
 
                 u.Id = id;
                 u.FirstName = uupd.FirstName;
                 u.LastName = uupd.LastName;
-                u.Email = uupd.Email;
+                u.Status = uupd.Status;
+                u.Avatar = uupd.Avatar;
 
                 bool UpdOk = S.ServiceLocator.Instance.usersService.Upd(id, u); ;
 
@@ -186,7 +197,7 @@ namespace TFProjectAPI.Controllers
         }
 
         /// <summary>
-        /// Delete User into table for Admin User(s)
+        /// Delete User into table for Admin User(s) (It's a soft deleted, user can be reactivate by Admin with ReactivateUser method
         /// </summary>
         /// <param name="id">Id of the record</param>
         [HttpDelete("{id}")]
@@ -195,6 +206,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (GET)");
                 bool DelOk = S.ServiceLocator.Instance.usersService.Del(id);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, DelOk), HttpStatusCode.OK);
             }
@@ -228,7 +240,7 @@ namespace TFProjectAPI.Controllers
             {
                 SM.User u = S.ServiceLocator.Instance.usersService.Login(l.Email, Base64.Base64Decode(l.Passwd));
 
-                if (u is null) throw new AuthenticationException("Wrong Login/passwd");
+                if (u is null) throw new AuthenticationException("Wrong Login/passwd (" + where + ") (LOGIN)");
 
                 //return Ok(new ApiResult<JWT_Bearer>(HttpStatusCode.OK, null, GenToken(u)));
                 return ApiControllerHelper.SendOk(this, new ApiResult<JWT_Bearer>(HttpStatusCode.OK, null, GenToken(u)), true);
@@ -276,15 +288,73 @@ namespace TFProjectAPI.Controllers
         [Authorize(Roles = "0,1")]
         public IActionResult ChangePasswd([FromBody] ChangePasswd UCP)
         {
-
             try
             {
+                if (UCP.Email.Length == 0) throw new ValidationException("Email empty (" + where + ") (CHG)");
+                if (UCP.OldPasswd.Length == 0) throw new ValidationException("Old Password empty (" + where + ") (CHG)");
+                if (UCP.Passwd.Length == 0) throw new ValidationException("Password empty (" + where + ") (CHG)");
+
                 bool EmailOK = S.ServiceLocator.Instance.usersService.EmailIsUsed(UCP.Email);
                 if (!EmailOK) throw new ValidationException("Email Not Found :" + UCP.Email);
 
-                S.ServiceLocator.Instance.usersService.ChangePasswd(UCP.Email, Base64.Base64Decode(UCP.OldPasswd), Base64.Base64Decode(UCP.Passwd));
+                return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, S.ServiceLocator.Instance.usersService.ChangePasswd(UCP.Email, Base64.Base64Decode(UCP.OldPasswd), Base64.Base64Decode(UCP.Passwd))), true);
+            }
+            catch (Exception ex)
+            {
+                return ApiControllerHelper.SendError(this, ex);
+            }
+        }
 
-                return ApiControllerHelper.SendOk(this);
+        /// <summary>
+        /// Reset Password o a user using a secret Answer
+        /// Secret Answer could be anything, the name o your mother, your firsdt pet Name, you favorite band, your choice
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///     POST / Login
+        ///     {
+        ///        "Email": "zecoop@gmail.com",
+        ///        "Secret Answer": "TVVIQURJQg=="
+        ///        "Passwd": "REVGNDU2"
+        ///     }
+        /// </remarks>
+        /// <param name="URP">Object with Email , Secret Answer in BASE64, New Password in BASE 64</param>
+        /// <returns></returns>
+        [HttpPut]
+        [AllowAnonymous]
+        public IActionResult ResetPasswd([FromBody] ResetPassword URP)
+        {
+            try
+            {
+                if (URP.Email.Length == 0) throw new ValidationException("Email empty (" + where + ") (RESET)");
+                if (URP.Passwd.Length == 0) throw new ValidationException("password empty (" + where + ") (RESET)");
+                if (URP.SecretAnswer.Length == 0) throw new ValidationException("Secret Answer empty (" + where + ") (RESET");
+
+                bool EmailOK = S.ServiceLocator.Instance.usersService.EmailIsUsed(URP.Email);
+                if (!EmailOK) throw new ValidationException("Email Not Found :" + URP.Email);
+
+                return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, S.ServiceLocator.Instance.usersService.ResetPasswd(URP.Email, Base64.Base64Decode(URP.SecretAnswer), Base64.Base64Decode(URP.Passwd))), true);
+
+            }
+            catch (Exception ex)
+            {
+                return ApiControllerHelper.SendError(this, ex);
+            }
+        }
+
+        /// <summary>
+        ///   Reactivate a 'Soft' Deleted USer, when U are admin
+        /// </summary>
+        /// <param name="id">Id of the record</param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        [Authorize(Roles = "0")]
+        public IActionResult ReactivateUser(int id)
+        {
+            try
+            {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (REACT)");
+                return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, S.ServiceLocator.Instance.usersService.ReactivateUser(id)), true);
             }
             catch (Exception ex)
             {
@@ -296,7 +366,7 @@ namespace TFProjectAPI.Controllers
         /// Generate New Token for an already exit token
         /// </summary>
         /// <returns>New Token for the user</returns>
-        [HttpPost]
+        [HttpGet]
         [Authorize(Roles = "0,1")]
         public IActionResult RenewToken()
         {
@@ -304,18 +374,18 @@ namespace TFProjectAPI.Controllers
             {
                 // check if claimtype Exist in the Token
                 bool hasUsernamer = HttpContext.User.HasClaim(c => c.Type == ClaimTypes.NameIdentifier);
-                if (!hasUsernamer) throw new SecurityTokenException("Issue with Token (no ClaimTypes.NameIdentifier)");
+                if (!hasUsernamer) throw new SecurityTokenException("Issue with Token (no ClaimTypes.NameIdentifier (" + where + ") (RENEW)");
 
                 // get back value ID from the Token & tryto Parse into Int
                 string valueUsername = HttpContext.User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
                 int id2w;
                 bool ParseSuccess = int.TryParse(valueUsername, out id2w);
 
-                if (!ParseSuccess) throw new SecurityTokenException("Issue with Token (TryParse)" + valueUsername);
+                if (!ParseSuccess) throw new SecurityTokenException("Issue with Token (TryParse)" + valueUsername + " (" + where + ") (RENEW)"); 
 
                 // Get back user data
                 SM.User u = S.ServiceLocator.Instance.usersService.Get(id2w);
-                if (u is null) throw new AuthenticationException("Record not found for Renew Token (" + id2w.ToString() + ")");
+                if (u is null) throw new AuthenticationException("Record not found for Renew Token (" + id2w.ToString() + ") (" + where + ") (RENEW)");
 
                 return ApiControllerHelper.SendOk(this, new ApiResult<JWT_Bearer>(HttpStatusCode.OK, null, GenToken(u)), true);
             }
@@ -338,7 +408,8 @@ namespace TFProjectAPI.Controllers
                 JwtService jwt = new JwtService(_config);
                 JWTB.id = u.Id;
                 JWTB.ExpirationDateTime = DateTime.Now.AddMinutes(double.Parse(_config.GetSection("JwtConfig").GetSection("expirationInMinutes").Value));
-                JWTB.BearerJWT = jwt.GenerateSecurityToken(u.Email, u.Status.ToString(), u.Id.ToString()); ;
+                JWTB.BearerJWT = jwt.GenerateSecurityToken(u.Email, u.Status.ToString(), u.Id.
+                    ToString()); ;
             }
             return JWTB;
         }

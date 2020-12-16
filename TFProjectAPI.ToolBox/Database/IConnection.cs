@@ -9,5 +9,6 @@ namespace TFProjectAPI.ToolBox.Database
         int ExecuteNonQuery(DBCommand command);
         IEnumerable<TResult> ExecuteReader<TResult>(DBCommand command, Func<IDataRecord, TResult> selector);
         object ExecuteScalar(DBCommand command);
+        DataTable GetDataTable(DBCommand command);   
     }
 }

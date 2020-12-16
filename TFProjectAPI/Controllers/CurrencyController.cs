@@ -21,6 +21,7 @@ namespace TFProjectAPI.Controllers
     [ApiController]
     public class CurrencyController : ControllerBase
     {
+        private string where = "ACURR";
         /// <summary>
         ///  Get a List of All Currencies record(s) in the Database
         /// </summary>
@@ -52,6 +53,7 @@ namespace TFProjectAPI.Controllers
 
             try
             {
+                if (curr.Length != 3) throw new IndexOutOfRangeException("Currency must be 3 digits (" + where + ") (GET)");
                 SM.Currency cur = S.ServiceLocator.Instance.CurrencyService.Get(curr);
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.Currency>(HttpStatusCode.OK, null, cur), true);
             }
@@ -79,7 +81,9 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
+                if (cur is null) throw new ArgumentNullException("Currency Object Empty (" + where + ") (ADD)");
+                if (cur.Curr is null) throw new ArgumentNullException("Currency Curr Empty (" + where + ") (ADD)");
+                if (cur.Curr.Length != 3) throw new IndexOutOfRangeException("Currency must be 3 digits (" + where + ") (ADD)");
                 SM.Currency curo = new SM.Currency(cur.Curr, cur.Desc);
                 S.ServiceLocator.Instance.CurrencyService.Add(curo);
                 return ApiControllerHelper.SendOk(this);
@@ -108,7 +112,9 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
+                if (cur is null) throw new ArgumentNullException("Currency Object Empty (" + where + ") (UPD)");
+                if (cur.Curr is null) throw new ArgumentNullException("Currency Curr Empty (" + where + ") (UPD)");
+                if (cur.Curr.Length != 3) throw new IndexOutOfRangeException("Currency must be 3 digits (" + where + ") (UPD)");
                 SM.Currency curo = new SM.Currency(cur.Curr, cur.Desc);
                 bool UpdOk = S.ServiceLocator.Instance.CurrencyService.Upd(curo);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, UpdOk), HttpStatusCode.OK);
@@ -129,6 +135,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (curr.Length != 3) throw new IndexOutOfRangeException("Currency must be 3 digits (" + where + ") (DEL)");
                 bool DelOk = S.ServiceLocator.Instance.CurrencyService.Del(curr);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, DelOk), HttpStatusCode.OK);
             }
@@ -149,6 +156,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (curr.Length != 3) throw new IndexOutOfRangeException("Currency must be 3 digits (" + where + ") (USED)");
                 int CurrCnt = S.ServiceLocator.Instance.CurrencyService.CurrencyIsUsed(curr);
                 return ApiControllerHelper.SendOk(this, new ApiResult<int>(HttpStatusCode.OK, null, CurrCnt), HttpStatusCode.OK);
             }

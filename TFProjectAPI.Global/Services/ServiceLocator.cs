@@ -8,13 +8,13 @@ using TFProjectAPI.Repo;
 using TFProjectAPI.ToolBox.Database;
 using TFProjectAPI.ToolBox.Patterns;
 
-
 namespace TFProjectAPI.Global.Services
 {
     public class ServiceLocator : ServLocator
     {
         private static ServiceLocator _instance;
         private IConfiguration _configuration;
+        
         public static ServiceLocator Instance
         {
             get { return _instance ?? new ServiceLocator(); }
@@ -33,11 +33,11 @@ namespace TFProjectAPI.Global.Services
             serviceCollection.AddSingleton<IConnectionInfo, DBConnectionInfo>((sp) => new DBConnectionInfo(_configuration.GetSection("ConnectionStrings").GetSection("DBCONN").Value));
             serviceCollection.AddSingleton<IConnection, DBConnection>();
 
-            serviceCollection.AddScoped<ICountryService<Country>, CountryService>();
-
             serviceCollection.AddScoped<IUsersService<User>, UsersService>();
 
-            serviceCollection.AddScoped<IGeneralTypeService<GeneralType>, GeneralTypesService>();
+            serviceCollection.AddScoped<ICountryService<Country>, CountryService>();
+
+            serviceCollection.AddScoped<IGeneralTypeService<GeneralType,GenYearPurch,GenObjectSearch>, GeneralTypesService>();
             serviceCollection.AddScoped<IShopService<Shop>, ShopService>();
             serviceCollection.AddScoped<ICurrencyService<Currency>, CurrencyService>();
             serviceCollection.AddScoped<ICurrency_Exchange<Currency_Exchange>, Currency_ExchangeService>();
@@ -65,9 +65,9 @@ namespace TFProjectAPI.Global.Services
             get { return Container.GetService<IShopService<Shop>>(); }
         }
 
-        public IGeneralTypeService<GeneralType> GeneralTypeService
+        public IGeneralTypeService<GeneralType, GenYearPurch, GenObjectSearch> GeneralTypeService
         { 
-            get { return Container.GetService<IGeneralTypeService<GeneralType>>(); }
+            get { return Container.GetService<IGeneralTypeService<GeneralType, GenYearPurch,GenObjectSearch >> (); }
         }
         public ICurrencyService<Currency> CurrencyService
         {

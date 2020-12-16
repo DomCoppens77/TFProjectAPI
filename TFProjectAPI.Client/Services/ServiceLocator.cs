@@ -19,7 +19,7 @@ namespace TFProjectAPI.Client.Services
         public override void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IUsersService<User>, UsersService>();
-            serviceCollection.AddScoped<IGeneralTypeService<GeneralType>, GeneralTypesService>();
+            serviceCollection.AddScoped<IGeneralTypeService<GeneralType, GenYearPurch, GenObjectSearch>, GeneralTypesService>();
             serviceCollection.AddScoped<ICurrencyService<Currency>, CurrencyService>();
             serviceCollection.AddScoped<IMusicFormatService<MusicFormat>, MusicFormatService>();
             serviceCollection.AddScoped<IMusicTypeService<MusicType>, MusicTypeService>();
@@ -40,9 +40,9 @@ namespace TFProjectAPI.Client.Services
           get { return Container.GetService<IShopService<Shop>>();  }
         }
 
-        public IGeneralTypeService<GeneralType> GeneralTypeService
+        public IGeneralTypeService<GeneralType, GenYearPurch, GenObjectSearch> GeneralTypeService
         {
-            get { return Container.GetService<IGeneralTypeService<GeneralType>>();  }
+            get { return Container.GetService<IGeneralTypeService<GeneralType, GenYearPurch, GenObjectSearch>>();  }
         }
 
         public ICurrencyService<Currency> CurrencyService

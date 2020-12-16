@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Net;
 using TFProjectAPI.Helper;
 using TFProjectAPI.Models.API;
@@ -18,6 +19,7 @@ namespace TFProjectAPI.Controllers
     [ApiController]
     public class MusicFormatController : ControllerBase
     {
+        private string where = "AMF";
         /// <summary>
         /// Get a List of All Music Format registred in the Database
         /// </summary>
@@ -48,6 +50,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (GET)");
                 SM.MusicFormat mf = S.ServiceLocator.Instance.MusicFormatService.Get(id);
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.MusicFormat>(HttpStatusCode.OK, null, mf), true);
             }
@@ -73,8 +76,9 @@ namespace TFProjectAPI.Controllers
         public IActionResult Add([FromBody] MusicFormat mf)
         {
             try 
-            { 
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
+            {
+                if (mf is null) throw new ArgumentNullException("Music Format Object Empty (" + where + ") (ADD)");
+                if (mf.Name.Length == 0) throw new DataException("Music Format NAme can't be BLANK (" + where + ") (ADD)");
                 SM.MusicFormat mfo = new SM.MusicFormat(0, mf.Name);
                 mfo = S.ServiceLocator.Instance.MusicFormatService.Add(mfo);
                 return ApiControllerHelper.SendOk(this, new ApiResult<SM.MusicFormat>(HttpStatusCode.OK, null, mfo), true);
@@ -103,7 +107,11 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) throw new ValidationException("Model is not meeting requirement");
+
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (UPD)");
+                if (mf is null) throw new ArgumentNullException("Music Format Object Empty (" + where + ") (UPD)");
+                if (mf.Name.Length == 0) throw new DataException("Music Format NAme can't be BLANK (" + where + ") (UPD)");
+
                 SM.MusicFormat mfo = new SM.MusicFormat(id, mf.Name);
                 bool UpdOk = S.ServiceLocator.Instance.MusicFormatService.Upd(mfo);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, UpdOk), HttpStatusCode.OK);
@@ -124,6 +132,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (DEL)");
                 bool DelOk = S.ServiceLocator.Instance.MusicFormatService.Del(id);
                 return ApiControllerHelper.SendOk(this, new ApiResult<bool>(HttpStatusCode.OK, null, DelOk), HttpStatusCode.OK);
             }
@@ -144,6 +153,7 @@ namespace TFProjectAPI.Controllers
         {
             try
             {
+                if (id < 1) throw new IndexOutOfRangeException("ID must be greater than 0 (" + where + ") (USED)");
                 int MFCount = S.ServiceLocator.Instance.MusicFormatService.MusicFormatIsUsed(id);
                 return ApiControllerHelper.SendOk(this, new ApiResult<int>(HttpStatusCode.OK, null, MFCount), HttpStatusCode.OK);
             }
